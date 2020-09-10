@@ -4,7 +4,7 @@ package agent.model.os;
  * @author Yaroslav
  */
 
-public class Windows extends OperationSystem {
+public final class Windows extends OperationSystem {
 
 	public Windows() {
 

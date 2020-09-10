@@ -4,7 +4,7 @@ package agent.model.os;
  * @author Yaroslav
  */
 
-public class Linux extends OperationSystem {
+public final class Linux extends OperationSystem {
 
 	public Linux() {
 		
