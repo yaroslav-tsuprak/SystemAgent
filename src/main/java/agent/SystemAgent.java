@@ -11,7 +11,6 @@ import oshi.software.os.OperatingSystem;
 
 /**
  * Hardware system agent
- * 
  * @author Yaroslav
  */
 
