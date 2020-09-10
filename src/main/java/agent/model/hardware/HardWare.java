@@ -8,14 +8,41 @@ import agent.model.hardware.interfaces.IHardWare;
 
 public abstract class HardWare implements IHardWare {
 
-	public String _deviceName;
+	private static String _deviceName;
+	private static String _devManufacturer;
+	private static String _devVendor;
+	private static String _devVersion;
 
-	String getDeviceName() {
+	String getName() {
 		return _deviceName;
 	}
 	
-	void setDeviceName(String devName) {
+	String getManufacturer() {
+		return _devManufacturer;
+	}
+	
+	String getVendor() {
+		return _devVendor;
+	}
+	
+	String getVersion() {
+		return _devVersion;
+	}
+	
+	void setName(String devName) {
 		_deviceName = devName;
+	}
+	
+	void setManufacturer(String devManufacturer) {
+		_devManufacturer = devManufacturer;
+	}
+	
+	void setVendor(String devVendor) {
+		_devVendor = devVendor;
+	}
+	
+	void setVersion(String devVersion) {
+		_devVersion = devVersion;
 	}
 	
 }
