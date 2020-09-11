@@ -9,8 +9,6 @@ public interface ICpu {
 	String getCpuIdentifier();
 	
 	String getCpuId();
-	
-	String getCpuVendor();
 
 	void setLogicalCpuCount(String logicalCpuCount);
 	
@@ -19,7 +17,5 @@ public interface ICpu {
 	void setCpuIdentifier(String cpuIdentifier);
 	
 	void setCpuId(String cpuId);
-	
-	void setCpuVendor(String puVendor);
 
 }

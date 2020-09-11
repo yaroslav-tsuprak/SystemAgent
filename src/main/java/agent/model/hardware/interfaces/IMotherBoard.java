@@ -2,20 +2,20 @@ package agent.model.hardware.interfaces;
 
 public interface IMotherBoard {
 
-	String getMotherBoardManufacturer();
+//	String getMotherBoardManufacturer();
 	
-	String getMotherBoardModel();
+//	String getMotherBoardModel();
 	
-	String getMotherBoardVersion();
+//	String getMotherBoardVersion();
 	
-	String getMotherBoardSerial();
+//	String getMotherBoardSerial();
 	
-	void setMotherBoardManufacturer(String manufacturer);
+//	void setMotherBoardManufacturer(String manufacturer);
 	
-	void setMotherBoardModel(String model);
+//	void setMotherBoardModel(String model);
 	
-	void setMotherBoardVersion(String version);
+//	void setMotherBoardVersion(String version);
 	
-	void setMotherBoardSerial(String serial);
+//	void setMotherBoardSerial(String serial);
 
 }

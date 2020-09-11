@@ -2,19 +2,19 @@ package agent.model.hardware.interfaces;
 
 public interface IDisk {
 
-	String getDiskName();
+//	String getDiskName();
 	
-	String getDiskModel();
+//	String getDiskModel();
 	
-	String getDiskSerial();
+//	String getDiskSerial();
 	
 	String getDiskSize();
 	
-	void setDiskName(String diskName);
+//	void setDiskName(String diskName);
 	
-	void setDiskModel(String diskModel);
+//	void setDiskModel(String diskModel);
 	
-	void setDiskSerial(String diskSerial);
+//	void setDiskSerial(String diskSerial);
 	
 	void setDiskSize(String diskSize);
 	

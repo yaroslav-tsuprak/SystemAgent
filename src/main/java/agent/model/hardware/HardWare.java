@@ -6,12 +6,15 @@ import agent.model.hardware.interfaces.IHardWare;
  * @author Yaroslav
  */
 
-public abstract class HardWare implements IHardWare {
+public class HardWare implements IHardWare {
 
 	private static String _deviceName;
 	private static String _devManufacturer;
+	private static String _devModel;
+	private static String _devSerial;
 	private static String _devVendor;
 	private static String _devVersion;
+	
 
 	String getName() {
 		return _deviceName;
@@ -19,6 +22,13 @@ public abstract class HardWare implements IHardWare {
 	
 	String getManufacturer() {
 		return _devManufacturer;
+	}
+	String getModel() {
+		return _devModel;
+	}
+	
+	String getSerial() {
+		return _devSerial;
 	}
 	
 	String getVendor() {
@@ -35,6 +45,14 @@ public abstract class HardWare implements IHardWare {
 	
 	void setManufacturer(String devManufacturer) {
 		_devManufacturer = devManufacturer;
+	}
+	
+	void setModel(String devModel) {
+		_devModel = devModel;
+	}
+	
+	void setSerial(String devSerial) {
+		_devSerial = devSerial;
 	}
 	
 	void setVendor(String devVendor) {

@@ -5,7 +5,6 @@ import agent.model.hardware.interfaces.IBios;
 public class Bios extends HardWare implements IBios {
 
 	private static String _description;
-	private static String _version;
 	private static String _releaseData;
 	
 	public String getBiosName() {
@@ -26,7 +25,7 @@ public class Bios extends HardWare implements IBios {
 
 	@Override
 	public String getBiosDescription() {
-		return null;
+		return _description;
 	}
 
 	public String getBiosVersion() {
@@ -35,12 +34,12 @@ public class Bios extends HardWare implements IBios {
 
 	@Override
 	public String getBiosReleaseDate() {
-		return null;
+		return _releaseData;
 	}
 
 	@Override
-	public void setBiosDescription(String biosDesc) {
-		
+	public void setBiosDescription(String biosDescription) {
+		_description = biosDescription;
 	}
 	
 	public void setBiosVersion(String biosVersion) {
@@ -49,7 +48,6 @@ public class Bios extends HardWare implements IBios {
 
 	@Override
 	public void setBiosReleaseDate(String biosReleaseData) {
-		
+		_releaseData = biosReleaseData;
 	}
-
 }
