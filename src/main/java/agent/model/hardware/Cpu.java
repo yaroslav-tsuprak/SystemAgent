@@ -2,7 +2,16 @@ package agent.model.hardware;
 
 import agent.model.hardware.interfaces.ICpu;
 
+/**
+ * @author Yaroslav
+ */
+
 public class Cpu extends HardWare implements ICpu {
+	
+	private static int _logicalCpuCount;
+	private static int _physicalCpuCount;
+	private static String _cpuIdentifier;
+	private static String _cpuId;
 
 	public String getCpuName() {
 		return super.getName();
@@ -12,52 +21,59 @@ public class Cpu extends HardWare implements ICpu {
 		return super.getVendor();
 	}
 	
+	public void setCpuName(String cpuName) {
+		super.setName(cpuName);
+	}
+	
+	public void setCpuVendor(String cpuVendor) {
+		super.setVendor(cpuVendor);
+	}
+	
 	@Override
-	public String getLogicalCpuCount() {
-		// TODO Auto-generated method stub
-		return null;
+	public int getLogicalCpuCount() {
+		return _logicalCpuCount;
 	}
 
 	@Override
-	public String getPhysicalCpuCount() {
-		// TODO Auto-generated method stub
-		return null;
+	public int getPhysicalCpuCount() {
+		return _physicalCpuCount;
 	}
 
 	@Override
 	public String getCpuIdentifier() {
-		// TODO Auto-generated method stub
-		return null;
+		return _cpuIdentifier;
 	}
 
 	@Override
 	public String getCpuId() {
-		// TODO Auto-generated method stub
-		return null;
+		return _cpuId;
 	}
 
 	@Override
-	public void setLogicalCpuCount(String logicalCpuCount) {
-		// TODO Auto-generated method stub
-		
+	public void setLogicalCpuCount(int logicalCpuCount) {
+		_logicalCpuCount = logicalCpuCount;
 	}
 
 	@Override
-	public void setPhysicalCpuCount(String physicalCpuCount) {
-		// TODO Auto-generated method stub
-		
+	public void setPhysicalCpuCount(int physicalCpuCount) {
+		_physicalCpuCount = physicalCpuCount;
 	}
 
 	@Override
 	public void setCpuIdentifier(String cpuIdentifier) {
-		// TODO Auto-generated method stub
-		
+		_cpuIdentifier = cpuIdentifier;
 	}
 
 	@Override
 	public void setCpuId(String cpuId) {
-		// TODO Auto-generated method stub
-		
+		_cpuId = cpuId;
 	}
-
+	
+	public static Cpu getInstance() {
+		return SingletonHolder.INSTANCE;
+	}
+	
+	private static class SingletonHolder {
+		protected static final Cpu INSTANCE = new Cpu();
+	}
 }

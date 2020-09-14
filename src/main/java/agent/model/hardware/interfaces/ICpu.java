@@ -1,18 +1,22 @@
 package agent.model.hardware.interfaces;
 
+/**
+ * @author Yaroslav
+ */
+
 public interface ICpu {
 
-	String getLogicalCpuCount();
+	int getLogicalCpuCount();
 	
-	String getPhysicalCpuCount();
+	int getPhysicalCpuCount();
 	
 	String getCpuIdentifier();
 	
 	String getCpuId();
 
-	void setLogicalCpuCount(String logicalCpuCount);
+	void setLogicalCpuCount(int logicalCpuCount);
 	
-	void setPhysicalCpuCount(String physicalCpuCount);
+	void setPhysicalCpuCount(int physicalCpuCount);
 	
 	void setCpuIdentifier(String cpuIdentifier);
 	

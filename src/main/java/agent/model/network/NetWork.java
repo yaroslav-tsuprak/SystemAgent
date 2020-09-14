@@ -77,4 +77,12 @@ public final class NetWork implements INetWork {
 	public void setMacAddress(String macAddress) {
 		_macAddress = macAddress;
 	}
+	
+	public static NetWork getInstance() {
+		return SingletonHolder.INSTANCE;
+	}
+	
+	private static class SingletonHolder {
+		protected static final NetWork INSTANCE = new NetWork();
+	}
 }

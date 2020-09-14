@@ -2,6 +2,10 @@ package agent.model.hardware;
 
 import agent.model.hardware.interfaces.IBios;
 
+/**
+ * @author Yaroslav
+ */
+
 public class Bios extends HardWare implements IBios {
 
 	private static String _description;
@@ -49,5 +53,13 @@ public class Bios extends HardWare implements IBios {
 	@Override
 	public void setBiosReleaseDate(String biosReleaseData) {
 		_releaseData = biosReleaseData;
+	}
+	
+	public static Bios getInstance() {
+		return SingletonHolder.INSTANCE;
+	}
+	
+	private static class SingletonHolder {
+		protected static final Bios INSTANCE = new Bios();
 	}
 }
