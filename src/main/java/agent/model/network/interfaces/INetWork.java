@@ -17,14 +17,5 @@ public interface INetWork {
 	List<String> getIpAddress();
 	
 	String getMacAddress();
-	
-	void setHostName(String hostName);
 
-	void setDomainName(String domainName);
-	
-	void setAdapterName(List<String> adapterName);
-	
-	void setIpAddress(List<String> ipAddress);
-	
-	void setMacAddress(String macAddress);
 }

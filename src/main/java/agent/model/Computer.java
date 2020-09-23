@@ -1,50 +1,76 @@
 package agent.model;
 
-import agent.model.os.Linux;
+import agent.model.hardware.Bios;
+import agent.model.hardware.Cpu;
+import agent.model.hardware.Disk;
+import agent.model.hardware.MotherBoard;
+import agent.model.hardware.Usb;
+import agent.model.network.NetWork;
 import agent.model.os.OperationSystem;
-import agent.model.os.Windows;
+import oshi.SystemInfo;
 
 /**
  * @author Yaroslav
  */
 
-public class Computer {
-
-	private static OperationSystem _osInformation;
+public final class Computer {
+	
+	private static Computer INSTANCE;
+	
 	private static int _id;
 	private static String _hashId;
 
+	private static OperationSystem _osInformation;
+	private static NetWork _networkInformation;
+	private static Bios _biosInformation;
+	private static Cpu _cpuInformation;
+	private static Disk _diskInformation;
+	private static MotherBoard _motherboardInformation;
+	private static Usb _usbInformation;
+
 	public Computer() {
-
+		INSTANCE = this;
+		SystemInfo sysInfo = new SystemInfo();		
+		_osInformation = OperationSystem.getInstance().load(sysInfo);
+		_networkInformation = NetWork.getInstance().load(sysInfo);
+		_biosInformation = Bios.getInstance().load(sysInfo);
+		_cpuInformation = Cpu.getInstance().load(sysInfo);
+		_diskInformation = Disk.getInstance().load(sysInfo);
+		_motherboardInformation = MotherBoard.getInstance().load(sysInfo);
+		_usbInformation = Usb.getInstance().load(sysInfo);
+		// TODO
+		_id = 0;
+		_hashId = "0";
 	}
 
-	public Computer(Object osType) {
-		storeOperationSystem(osType);
-	}
-
-	public void storeOperationSystem(Object osType) {
-		OperationSystem os = null;
-
-		if (osType instanceof Windows) {
-			os = new Windows();
-			os.setOsManufacturer(((Windows) osType).getOsManufacturer());
-			os.setOsFamily(((Windows) osType).getOsFamily());
-			os.setOsVersionInfo(((Windows) osType).getOsVersionInfo());
-			os.setOsBitness(((Windows) osType).getOsBitness());
-		} else if (osType instanceof Linux) {
-			os = new Linux();
-			os.setOsManufacturer(((Linux) osType).getOsManufacturer());
-			os.setOsFamily(((Linux) osType).getOsFamily());
-			os.setOsVersionInfo(((Linux) osType).getOsVersionInfo());
-			os.setOsBitness(((Linux) osType).getOsBitness());
-		}
-		_osInformation = os;
-	}
-
-	public OperationSystem getOperationSystemInformation() {
+	public OperationSystem getOperationSystemInfo() {
 		return _osInformation;
 	}
+	
+	public NetWork getNetworkInfo() {
+		return _networkInformation;
+	}
 
+	public Bios getBiosInfo() {
+		return _biosInformation;
+	}
+	
+	public Cpu getCpuInfo() {
+		return _cpuInformation;
+	}
+	
+	public Disk getDiskInfo() {
+		return _diskInformation;
+	}
+	
+	public MotherBoard getMotherboardInfo() {
+		return _motherboardInformation;
+	}
+	
+	public Usb getUsbInfo() {
+		return _usbInformation;
+	}
+	
 	public int getComputerId() {
 		return _id;
 	}
@@ -53,19 +79,7 @@ public class Computer {
 		return _hashId;
 	}
 
-	public void setComputerId(int id) {
-		_id = id;
-	}
-
-	public void setComputerHashId(String hashId) {
-		_hashId = hashId;
-	}
-
 	public static Computer getInstance() {
-		return SingletonHolder.INSTANCE;
-	}
-
-	private static class SingletonHolder {
-		protected static final Computer INSTANCE = new Computer();
+		return INSTANCE;
 	}
 }

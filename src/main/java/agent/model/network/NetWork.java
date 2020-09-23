@@ -1,14 +1,20 @@
 package agent.model.network;
 
+import java.util.Arrays;
 import java.util.List;
 
 import agent.model.network.interfaces.INetWork;
+import oshi.SystemInfo;
+import oshi.hardware.NetworkIF;
+import oshi.software.os.NetworkParams;
 
 /**
  * @author Yaroslav
  */
 
 public final class NetWork implements INetWork {
+	
+	private static NetWork INSTANCE;
 
 	private static String _hostName;
 	private static String _domainName;
@@ -17,15 +23,21 @@ public final class NetWork implements INetWork {
 	private static String _macAddress;
 
 	public NetWork() {
-		
+		INSTANCE = this;
 	}
 	
-	public NetWork(String hostName, String domainName, List<String> adapterName, List<String> ipAddress, String macAddress) {
-		_hostName = hostName;
-		_domainName = domainName;
-		_adapterName.addAll(adapterName);
-		_ipAddress.addAll(ipAddress);
-		_macAddress = macAddress;
+	public NetWork load(SystemInfo sysInfo) {
+		NetworkParams net = sysInfo.getOperatingSystem().getNetworkParams();
+		_hostName = net.getHostName();
+		_domainName = net.getDomainName();
+
+		sysInfo.getHardware().getNetworkIFs().forEach(n -> {
+			_adapterName.add(n.getDisplayName());
+			_ipAddress.add(Arrays.toString(n.getIPv4addr()));
+			_macAddress = n.getMacaddr();
+		});
+		
+		return this;
 	}
 
 	@Override
@@ -52,37 +64,8 @@ public final class NetWork implements INetWork {
 	public String getMacAddress() {
 		return _macAddress;
 	}
-
-	@Override
-	public void setHostName(String hostName) {
-		_hostName = hostName;
-	}
-
-	@Override
-	public void setDomainName(String domainName) {
-		_domainName = domainName;
-	}
-
-	@Override
-	public void setAdapterName(List<String> adapterName) {
-		_adapterName.addAll(adapterName);
-	}
-
-	@Override
-	public void setIpAddress(List<String> ipAddress) {
-		_ipAddress.addAll(ipAddress);
-	}
-
-	@Override
-	public void setMacAddress(String macAddress) {
-		_macAddress = macAddress;
-	}
 	
 	public static NetWork getInstance() {
-		return SingletonHolder.INSTANCE;
-	}
-	
-	private static class SingletonHolder {
-		protected static final NetWork INSTANCE = new NetWork();
+		return INSTANCE;
 	}
 }

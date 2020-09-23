@@ -1,17 +1,39 @@
 package agent.model.hardware;
 
 import agent.model.hardware.interfaces.ICpu;
+import oshi.SystemInfo;
+import oshi.hardware.CentralProcessor;
+import oshi.hardware.CentralProcessor.ProcessorIdentifier;
 
 /**
  * @author Yaroslav
  */
 
-public class Cpu extends HardWare implements ICpu {
+public final class Cpu extends HardWare implements ICpu {
+	
+	private static Cpu INSTANCE;
 	
 	private static int _logicalCpuCount;
 	private static int _physicalCpuCount;
 	private static String _cpuIdentifier;
 	private static String _cpuId;
+	
+	public Cpu() {
+		INSTANCE = this;
+	}
+	
+	public Cpu load(SystemInfo sysInfo) {
+		CentralProcessor cpu = sysInfo.getHardware().getProcessor();
+		ProcessorIdentifier cpuIdentifier = cpu.getProcessorIdentifier();
+		setCpuName(cpuIdentifier.getName());
+		setCpuVendor(cpuIdentifier.getVendor());
+		_logicalCpuCount = cpu.getLogicalProcessorCount();
+		_physicalCpuCount = cpu.getPhysicalPackageCount();
+		_cpuIdentifier = cpuIdentifier.getIdentifier();
+		_cpuId = cpuIdentifier.getProcessorID();
+		
+		return this;
+	}
 
 	public String getCpuName() {
 		return super.getName();
@@ -49,31 +71,7 @@ public class Cpu extends HardWare implements ICpu {
 		return _cpuId;
 	}
 
-	@Override
-	public void setLogicalCpuCount(int logicalCpuCount) {
-		_logicalCpuCount = logicalCpuCount;
-	}
-
-	@Override
-	public void setPhysicalCpuCount(int physicalCpuCount) {
-		_physicalCpuCount = physicalCpuCount;
-	}
-
-	@Override
-	public void setCpuIdentifier(String cpuIdentifier) {
-		_cpuIdentifier = cpuIdentifier;
-	}
-
-	@Override
-	public void setCpuId(String cpuId) {
-		_cpuId = cpuId;
-	}
-	
 	public static Cpu getInstance() {
-		return SingletonHolder.INSTANCE;
-	}
-	
-	private static class SingletonHolder {
-		protected static final Cpu INSTANCE = new Cpu();
+		return INSTANCE;
 	}
 }

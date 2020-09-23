@@ -8,6 +8,4 @@ public interface IUsb {
 	
 	String getUsbUniqueDeviceId();
 	
-	void setUsbUniqueDeviceId(String devId);
-	
 }

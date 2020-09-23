@@ -6,8 +6,4 @@ public interface IBios {
 	
 	String getBiosReleaseDate();
 	
-	void setBiosDescription(String biosDesc);
-	
-	void setBiosReleaseDate(String biosReleaseData);
-	
 }

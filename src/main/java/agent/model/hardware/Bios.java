@@ -1,15 +1,35 @@
 package agent.model.hardware;
 
 import agent.model.hardware.interfaces.IBios;
+import oshi.SystemInfo;
+import oshi.hardware.Firmware;
 
 /**
  * @author Yaroslav
  */
 
-public class Bios extends HardWare implements IBios {
+public final class Bios extends HardWare implements IBios {
+	
+	private static Bios INSTANCE;
 
 	private static String _description;
 	private static String _releaseData;
+	
+	public Bios() {
+		INSTANCE = this;
+	}
+	
+	public Bios load(SystemInfo sysInfo)
+	{
+		Firmware bios = sysInfo.getHardware().getComputerSystem().getFirmware();
+		setBiosName(bios.getManufacturer());
+		setBiosManufacturer(bios.getManufacturer());
+		setBiosVersion(bios.getVersion());
+		_description = bios.getDescription();
+		_releaseData = bios.getReleaseDate();
+		
+		return this;
+	}
 	
 	public String getBiosName() {
 		return super.getName();
@@ -27,23 +47,8 @@ public class Bios extends HardWare implements IBios {
 		super.setManufacturer(biosManufacturer);
 	}
 
-	@Override
-	public String getBiosDescription() {
-		return _description;
-	}
-
 	public String getBiosVersion() {
 		return super.getVersion();
-	}
-
-	@Override
-	public String getBiosReleaseDate() {
-		return _releaseData;
-	}
-
-	@Override
-	public void setBiosDescription(String biosDescription) {
-		_description = biosDescription;
 	}
 	
 	public void setBiosVersion(String biosVersion) {
@@ -51,15 +56,16 @@ public class Bios extends HardWare implements IBios {
 	}
 
 	@Override
-	public void setBiosReleaseDate(String biosReleaseData) {
-		_releaseData = biosReleaseData;
+	public String getBiosDescription() {
+		return _description;
+	}
+
+	@Override
+	public String getBiosReleaseDate() {
+		return _releaseData;
 	}
 	
 	public static Bios getInstance() {
-		return SingletonHolder.INSTANCE;
-	}
-	
-	private static class SingletonHolder {
-		protected static final Bios INSTANCE = new Bios();
+		return INSTANCE;
 	}
 }

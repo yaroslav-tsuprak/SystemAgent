@@ -1,12 +1,28 @@
 package agent.model.hardware;
 
-import agent.model.hardware.interfaces.IMotherBoard;
+import oshi.SystemInfo;
+import oshi.hardware.Baseboard;
 
 /**
  * @author Yaroslav
  */
 
-public class MotherBoard extends HardWare implements IMotherBoard {
+public final class MotherBoard extends HardWare {
+	
+	private static MotherBoard INSTANCE;
+	
+	public MotherBoard() {
+		INSTANCE = this;
+	}
+	
+	public MotherBoard load(SystemInfo sysInfo) {
+		Baseboard mb = sysInfo.getHardware().getComputerSystem().getBaseboard();
+		setMotherBoardManufacturer(mb.getManufacturer());
+		setMotherBoardModel(mb.getModel());
+		setMotherBoardSerial(mb.getSerialNumber());
+		setMotherBoardVersion(mb.getVersion());
+		return this;
+	}
 	
 	public String getMotherBoardManufacturer() {
 		return super.getManufacturer();
@@ -41,10 +57,6 @@ public class MotherBoard extends HardWare implements IMotherBoard {
 	}
 	
 	public static MotherBoard getInstance() {
-		return SingletonHolder.INSTANCE;
-	}
-	
-	private static class SingletonHolder {
-		protected static final MotherBoard INSTANCE = new MotherBoard();
+		return INSTANCE;
 	}
 }

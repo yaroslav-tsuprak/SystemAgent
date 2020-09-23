@@ -6,8 +6,6 @@ package agent.model.hardware.interfaces;
 
 public interface IDisk {
 	
-	String getDiskSize();
-	
-	void setDiskSize(String diskSize);
+	long getDiskSize();
 	
 }

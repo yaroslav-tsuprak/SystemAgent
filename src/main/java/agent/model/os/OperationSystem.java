@@ -1,26 +1,36 @@
 package agent.model.os;
 
+import agent.model.os.interfaces.IOperationSystem;
+import oshi.SystemInfo;
+import oshi.software.os.OperatingSystem;
+
 /**
  * @author Yaroslav
  */
 
-public abstract class OperationSystem implements IOperationSystem {
+public final class OperationSystem implements IOperationSystem {
+	
+	private static OperationSystem INSTANCE;
 
 	private static String _osManufacturer;
 	private static String _osFamily;
 	private static String _osVersionInfo;
-	private static String _osBitness;
+	private static int _osBitness;
 
 	public OperationSystem() {
-		
+		INSTANCE = this;
 	}
 	
-	public OperationSystem(String osManufacturer, String osFamily, String osVersionInfo, String osBitness)
+	public OperationSystem load(SystemInfo sysInfo)
 	{
-		setOsManufacturer(osManufacturer);
-		setOsFamily(osFamily);
-		setOsVersionInfo(osVersionInfo);
-		setOsBitness(osBitness);
+		OperatingSystem os = sysInfo.getOperatingSystem();
+		
+		_osManufacturer = os.getManufacturer();
+		_osFamily = os.getFamily();
+		_osVersionInfo = os.getVersionInfo().getVersion();
+		_osBitness = os.getBitness();
+		
+		return this;
 	}
 	
 	public String getOsManufacturer() {
@@ -35,23 +45,11 @@ public abstract class OperationSystem implements IOperationSystem {
 		return _osVersionInfo;
 	}
 
-	public String getOsBitness() {
+	public int getOsBitness() {
 		return _osBitness;
 	}
 
-	public void setOsManufacturer(String osManufacturer) {
-		_osManufacturer = osManufacturer;
-	}
-
-	public void setOsFamily(String osFamily) {
-		_osFamily = osFamily;
-	}
-
-	public void setOsVersionInfo(String osVersionInfo) {
-		_osVersionInfo = osVersionInfo;
-	}
-
-	public void setOsBitness(String osBitness) {
-		_osBitness = osBitness;
+	public static OperationSystem getInstance() {
+		return INSTANCE;
 	}
 }

@@ -14,12 +14,4 @@ public interface ICpu {
 	
 	String getCpuId();
 
-	void setLogicalCpuCount(int logicalCpuCount);
-	
-	void setPhysicalCpuCount(int physicalCpuCount);
-	
-	void setCpuIdentifier(String cpuIdentifier);
-	
-	void setCpuId(String cpuId);
-
 }

@@ -1,15 +1,37 @@
 package agent.model.hardware;
 
+import java.util.List;
+
 import agent.model.hardware.interfaces.IDisk;
+import oshi.SystemInfo;
+import oshi.hardware.HWDiskStore;
+import oshi.hardware.HardwareAbstractionLayer;
 
 /**
  * @author Yaroslav
  */
 
-public class Disk extends HardWare implements IDisk {
+public final class Disk extends HardWare implements IDisk {
 	
-	private static String _diskSize;
+	private static Disk INSTANCE;
+	
+	private static long _diskSize;
+	
+	public Disk() {
+		INSTANCE = this;
+	}
 
+	public Disk load(SystemInfo sysInfo) {
+		sysInfo.getHardware().getDiskStores().forEach(d -> {
+			setDiskName(d.getName());
+			setDiskModel(d.getModel());
+			setDiskSerial(d.getSerial());
+			_diskSize = d.getSize();
+		});
+		
+		return this;
+	}
+	
 	public String getDiskName() {
 		return super.getName();
 	}
@@ -35,20 +57,11 @@ public class Disk extends HardWare implements IDisk {
 	}
 	
 	@Override
-	public String getDiskSize() {
+	public long getDiskSize() {
 		return _diskSize;
-	}
-
-	@Override
-	public void setDiskSize(String diskSize) {
-		_diskSize = diskSize;
 	}
 	
 	public static Disk getInstance() {
-		return SingletonHolder.INSTANCE;
-	}
-	
-	private static class SingletonHolder {
-		protected static final Disk INSTANCE = new Disk();
+		return INSTANCE;
 	}
 }

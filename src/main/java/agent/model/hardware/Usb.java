@@ -1,14 +1,31 @@
 package agent.model.hardware;
 
 import agent.model.hardware.interfaces.IUsb;
+import oshi.SystemInfo;
 
 /**
  * @author Yaroslav
  */
 
-public class Usb extends HardWare implements IUsb {
+public final class Usb extends HardWare implements IUsb {
+	
+	private static Usb INSTANCE;
 	
 	private static String _usbDeviceId;
+	
+	public Usb() {
+		INSTANCE = this;
+	}
+	
+	public Usb load(SystemInfo sysInfo) {
+		sysInfo.getHardware().getUsbDevices(false).forEach(usb -> {
+			setUsbName(usb.getName());
+			setUsbgetVendor(usb.getVendor());
+			_usbDeviceId = usb.getUniqueDeviceId();
+		});
+		
+		return this;
+	}
 	
 	public String getUsbName() {
 		return super.getName();
@@ -30,17 +47,8 @@ public class Usb extends HardWare implements IUsb {
 	public String getUsbUniqueDeviceId() {
 		return _usbDeviceId;
 	}
-
-	@Override
-	public void setUsbUniqueDeviceId(String devId) {
-		_usbDeviceId = devId;
-	}
 	
 	public static Usb getInstance() {
-		return SingletonHolder.INSTANCE;
-	}
-	
-	private static class SingletonHolder {
-		protected static final Usb INSTANCE = new Usb();
+		return INSTANCE;
 	}
 }
