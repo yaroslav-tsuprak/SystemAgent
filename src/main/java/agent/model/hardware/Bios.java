@@ -9,17 +9,15 @@ import oshi.hardware.Firmware;
  */
 
 public final class Bios extends HardWare implements IBios {
-	
-	private static Bios INSTANCE;
 
 	private static String _description;
 	private static String _releaseData;
 	
-	public Bios() {
-		INSTANCE = this;
+	public Bios(SystemInfo sysInfo) {
+		load(sysInfo);
 	}
 	
-	public Bios load(SystemInfo sysInfo)
+	public void load(SystemInfo sysInfo)
 	{
 		Firmware bios = sysInfo.getHardware().getComputerSystem().getFirmware();
 		setBiosName(bios.getManufacturer());
@@ -27,8 +25,6 @@ public final class Bios extends HardWare implements IBios {
 		setBiosVersion(bios.getVersion());
 		_description = bios.getDescription();
 		_releaseData = bios.getReleaseDate();
-		
-		return this;
 	}
 	
 	public String getBiosName() {
@@ -63,9 +59,5 @@ public final class Bios extends HardWare implements IBios {
 	@Override
 	public String getBiosReleaseDate() {
 		return _releaseData;
-	}
-	
-	public static Bios getInstance() {
-		return INSTANCE;
 	}
 }

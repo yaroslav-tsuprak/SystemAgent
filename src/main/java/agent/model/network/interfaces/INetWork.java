@@ -16,6 +16,6 @@ public interface INetWork {
 	
 	List<String> getIpAddress();
 	
-	String getMacAddress();
+	List<String> getMacAddress();
 
 }

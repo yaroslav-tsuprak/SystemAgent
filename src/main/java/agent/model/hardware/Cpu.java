@@ -11,18 +11,16 @@ import oshi.hardware.CentralProcessor.ProcessorIdentifier;
 
 public final class Cpu extends HardWare implements ICpu {
 	
-	private static Cpu INSTANCE;
-	
 	private static int _logicalCpuCount;
 	private static int _physicalCpuCount;
 	private static String _cpuIdentifier;
 	private static String _cpuId;
 	
-	public Cpu() {
-		INSTANCE = this;
+	public Cpu(SystemInfo sysInfo) {
+		load(sysInfo);
 	}
 	
-	public Cpu load(SystemInfo sysInfo) {
+	public void load(SystemInfo sysInfo) {
 		CentralProcessor cpu = sysInfo.getHardware().getProcessor();
 		ProcessorIdentifier cpuIdentifier = cpu.getProcessorIdentifier();
 		setCpuName(cpuIdentifier.getName());
@@ -31,8 +29,6 @@ public final class Cpu extends HardWare implements ICpu {
 		_physicalCpuCount = cpu.getPhysicalPackageCount();
 		_cpuIdentifier = cpuIdentifier.getIdentifier();
 		_cpuId = cpuIdentifier.getProcessorID();
-		
-		return this;
 	}
 
 	public String getCpuName() {
@@ -69,9 +65,5 @@ public final class Cpu extends HardWare implements ICpu {
 	@Override
 	public String getCpuId() {
 		return _cpuId;
-	}
-
-	public static Cpu getInstance() {
-		return INSTANCE;
 	}
 }

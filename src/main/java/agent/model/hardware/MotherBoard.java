@@ -8,20 +8,17 @@ import oshi.hardware.Baseboard;
  */
 
 public final class MotherBoard extends HardWare {
-	
-	private static MotherBoard INSTANCE;
-	
-	public MotherBoard() {
-		INSTANCE = this;
+
+	public MotherBoard(SystemInfo sysInfo) {
+		load(sysInfo);
 	}
 	
-	public MotherBoard load(SystemInfo sysInfo) {
+	public void load(SystemInfo sysInfo) {
 		Baseboard mb = sysInfo.getHardware().getComputerSystem().getBaseboard();
 		setMotherBoardManufacturer(mb.getManufacturer());
 		setMotherBoardModel(mb.getModel());
 		setMotherBoardSerial(mb.getSerialNumber());
 		setMotherBoardVersion(mb.getVersion());
-		return this;
 	}
 	
 	public String getMotherBoardManufacturer() {
@@ -54,9 +51,5 @@ public final class MotherBoard extends HardWare {
 	
 	public void setMotherBoardSerial(String serial) {
 		super.setSerial(serial);
-	}
-	
-	public static MotherBoard getInstance() {
-		return INSTANCE;
 	}
 }

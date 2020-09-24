@@ -10,12 +10,7 @@ import agent.model.Computer;
 public class SystemAgent {
 
 	public static void main(String[] args) {
-		
 		Computer comp = Computer.getInstance();
-
-//		HardwareAbstractionLayer hw = si.getHardware();
-//		System.out.println(hw.getGraphicsCards());
-//		System.out.println(hw.getMemory());
-
+		System.out.println(comp.getOperationSystemInfo().getOsFamily());
 	}
 }

@@ -8,23 +8,19 @@ import oshi.SystemInfo;
  */
 
 public final class Usb extends HardWare implements IUsb {
-	
-	private static Usb INSTANCE;
-	
+
 	private static String _usbDeviceId;
 	
-	public Usb() {
-		INSTANCE = this;
+	public Usb(SystemInfo sysInfo) {
+		load(sysInfo);
 	}
 	
-	public Usb load(SystemInfo sysInfo) {
+	public void load(SystemInfo sysInfo) {
 		sysInfo.getHardware().getUsbDevices(false).forEach(usb -> {
 			setUsbName(usb.getName());
 			setUsbgetVendor(usb.getVendor());
 			_usbDeviceId = usb.getUniqueDeviceId();
 		});
-		
-		return this;
 	}
 	
 	public String getUsbName() {
@@ -46,9 +42,5 @@ public final class Usb extends HardWare implements IUsb {
 	@Override
 	public String getUsbUniqueDeviceId() {
 		return _usbDeviceId;
-	}
-	
-	public static Usb getInstance() {
-		return INSTANCE;
 	}
 }

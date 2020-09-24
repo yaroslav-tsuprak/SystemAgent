@@ -1,11 +1,11 @@
 package agent.model.network;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 import agent.model.network.interfaces.INetWork;
 import oshi.SystemInfo;
-import oshi.hardware.NetworkIF;
 import oshi.software.os.NetworkParams;
 
 /**
@@ -13,20 +13,17 @@ import oshi.software.os.NetworkParams;
  */
 
 public final class NetWork implements INetWork {
-	
-	private static NetWork INSTANCE;
-
 	private static String _hostName;
 	private static String _domainName;
-	private static List<String> _adapterName;
-	private static List<String> _ipAddress;
-	private static String _macAddress;
-
-	public NetWork() {
-		INSTANCE = this;
+	private static List<String> _adapterName = new ArrayList<String>();
+	private static List<String> _ipAddress = new ArrayList<String>();
+	private static List<String> _macAddress = new ArrayList<String>();
+	
+	public NetWork(SystemInfo sysInfo) {
+		load(sysInfo);
 	}
 	
-	public NetWork load(SystemInfo sysInfo) {
+	public void load(SystemInfo sysInfo) {
 		NetworkParams net = sysInfo.getOperatingSystem().getNetworkParams();
 		_hostName = net.getHostName();
 		_domainName = net.getDomainName();
@@ -34,10 +31,8 @@ public final class NetWork implements INetWork {
 		sysInfo.getHardware().getNetworkIFs().forEach(n -> {
 			_adapterName.add(n.getDisplayName());
 			_ipAddress.add(Arrays.toString(n.getIPv4addr()));
-			_macAddress = n.getMacaddr();
+			_macAddress.add(n.getMacaddr());
 		});
-		
-		return this;
 	}
 
 	@Override
@@ -61,11 +56,7 @@ public final class NetWork implements INetWork {
 	}
 
 	@Override
-	public String getMacAddress() {
+	public List<String> getMacAddress() {
 		return _macAddress;
-	}
-	
-	public static NetWork getInstance() {
-		return INSTANCE;
 	}
 }

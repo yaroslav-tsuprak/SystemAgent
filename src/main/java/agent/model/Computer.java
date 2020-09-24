@@ -3,6 +3,8 @@ package agent.model;
 import agent.model.hardware.Bios;
 import agent.model.hardware.Cpu;
 import agent.model.hardware.Disk;
+import agent.model.hardware.GraphicsCards;
+import agent.model.hardware.Memory;
 import agent.model.hardware.MotherBoard;
 import agent.model.hardware.Usb;
 import agent.model.network.NetWork;
@@ -15,8 +17,6 @@ import oshi.SystemInfo;
 
 public final class Computer {
 	
-	private static Computer INSTANCE;
-	
 	private static int _id;
 	private static String _hashId;
 
@@ -27,17 +27,20 @@ public final class Computer {
 	private static Disk _diskInformation;
 	private static MotherBoard _motherboardInformation;
 	private static Usb _usbInformation;
+	private static GraphicsCards _graphicsCard;
+	private static Memory _memory;
 
-	public Computer() {
-		INSTANCE = this;
+	private Computer() {
 		SystemInfo sysInfo = new SystemInfo();		
-		_osInformation = OperationSystem.getInstance().load(sysInfo);
-		_networkInformation = NetWork.getInstance().load(sysInfo);
-		_biosInformation = Bios.getInstance().load(sysInfo);
-		_cpuInformation = Cpu.getInstance().load(sysInfo);
-		_diskInformation = Disk.getInstance().load(sysInfo);
-		_motherboardInformation = MotherBoard.getInstance().load(sysInfo);
-		_usbInformation = Usb.getInstance().load(sysInfo);
+		_osInformation = new OperationSystem(sysInfo);
+		_networkInformation = new NetWork(sysInfo);
+		_biosInformation = new Bios(sysInfo);
+		_cpuInformation = new Cpu(sysInfo);
+		_diskInformation = new Disk(sysInfo);
+		_motherboardInformation = new MotherBoard(sysInfo);
+		_usbInformation = new Usb(sysInfo);
+		_graphicsCard = new GraphicsCards(sysInfo);
+		_memory = new Memory(sysInfo);
 		// TODO
 		_id = 0;
 		_hashId = "0";
@@ -71,6 +74,14 @@ public final class Computer {
 		return _usbInformation;
 	}
 	
+	public GraphicsCards getGraphicCardInfo() {
+		return _graphicsCard;
+	}
+	
+	public Memory getMemoryInfo() {
+		return _memory;
+	}
+	
 	public int getComputerId() {
 		return _id;
 	}
@@ -80,6 +91,11 @@ public final class Computer {
 	}
 
 	public static Computer getInstance() {
-		return INSTANCE;
+		return SingletonHolder.INSTANCE;
+	}
+
+	private static class SingletonHolder
+	{
+		protected static final Computer INSTANCE = new Computer();
 	}
 }
