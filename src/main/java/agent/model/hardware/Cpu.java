@@ -9,8 +9,10 @@ import oshi.hardware.CentralProcessor.ProcessorIdentifier;
  * @author Yaroslav
  */
 
-public final class Cpu extends HardWare implements ICpu {
+public final class Cpu implements ICpu {
 	
+	private static String _cpuName;
+	private static String _cpuVendor;
 	private static int _logicalCpuCount;
 	private static int _physicalCpuCount;
 	private static String _cpuIdentifier;
@@ -23,28 +25,22 @@ public final class Cpu extends HardWare implements ICpu {
 	public void load(SystemInfo sysInfo) {
 		CentralProcessor cpu = sysInfo.getHardware().getProcessor();
 		ProcessorIdentifier cpuIdentifier = cpu.getProcessorIdentifier();
-		setCpuName(cpuIdentifier.getName());
-		setCpuVendor(cpuIdentifier.getVendor());
+		_cpuName = cpuIdentifier.getName();
+		_cpuVendor = cpuIdentifier.getVendor();
 		_logicalCpuCount = cpu.getLogicalProcessorCount();
 		_physicalCpuCount = cpu.getPhysicalPackageCount();
 		_cpuIdentifier = cpuIdentifier.getIdentifier();
 		_cpuId = cpuIdentifier.getProcessorID();
 	}
 
+	@Override
 	public String getCpuName() {
-		return super.getName();
+		return _cpuName;
 	}
 	
+	@Override
 	public String getCpuVendor() {
-		return super.getVendor();
-	}
-	
-	public void setCpuName(String cpuName) {
-		super.setName(cpuName);
-	}
-	
-	public void setCpuVendor(String cpuVendor) {
-		super.setVendor(cpuVendor);
+		return _cpuVendor;
 	}
 	
 	@Override

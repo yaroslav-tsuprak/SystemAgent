@@ -4,7 +4,13 @@ import agent.model.hardware.interfaces.IMemory;
 import oshi.SystemInfo;
 import oshi.hardware.GlobalMemory;
 
-public class Memory extends HardWare implements IMemory {
+public class Memory implements IMemory {
+	
+	private static long _memoryTotal;
+	private static String _memoryBankLabel;
+	private static long _memoryCapacity;
+	private static String _memoryManufacturer;
+	private static String _memoryType;
 	
 	public Memory(SystemInfo sysInfo) {
 		load(sysInfo);
@@ -16,22 +22,14 @@ public class Memory extends HardWare implements IMemory {
 		memory.getPhysicalMemory().forEach(m -> {
 			_memoryBankLabel = m.getBankLabel();
 			_memoryCapacity = m.getCapacity();
+			_memoryManufacturer = m.getManufacturer();
 			_memoryType = m.getMemoryType();
-			setMemoryManufacturer(m.getManufacturer());
 		});
 	}
 	
-	private static long _memoryTotal;
-	private static String _memoryBankLabel;
-	private static long _memoryCapacity;
-	private static String _memoryType;
-	
+	@Override
 	public String getMemoryManufacturer() {
-		return super.getManufacturer();
-	}
-	
-	public void setMemoryManufacturer(String memoryManufacturer) {
-		super.setManufacturer(memoryManufacturer);
+		return _memoryManufacturer;
 	}
 	
 	@Override

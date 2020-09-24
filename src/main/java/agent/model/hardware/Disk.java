@@ -7,8 +7,11 @@ import oshi.SystemInfo;
  * @author Yaroslav
  */
 
-public final class Disk extends HardWare implements IDisk {
+public final class Disk implements IDisk {
 	
+	private static String _diskName;
+	private static String _diskModel;
+	private static String _diskSerial;
 	private static long _diskSize;
 	
 	public Disk(SystemInfo sysInfo) {
@@ -17,35 +20,26 @@ public final class Disk extends HardWare implements IDisk {
 
 	public void load(SystemInfo sysInfo) {
 		sysInfo.getHardware().getDiskStores().forEach(d -> {
-			setDiskName(d.getName());
-			setDiskModel(d.getModel());
-			setDiskSerial(d.getSerial());
+			_diskName = d.getName();
+			_diskModel = d.getModel();
+			_diskSerial = d.getSerial();
 			_diskSize = d.getSize();
 		});
 	}
 	
+	@Override
 	public String getDiskName() {
-		return super.getName();
+		return _diskName;
 	}
 
+	@Override
 	public String getDiskModel() {
-		return super.getModel();
+		return _diskModel;
 	}
 	
+	@Override
 	public String getDiskSerial() {
-		return super.getSerial();
-	}
-	
-	public void setDiskName(String diskName) {
-		super.setName(diskName);
-	}
-	
-	public void setDiskModel(String diskModel) {
-		super.setModel(diskModel);
-	}
-	
-	public void setDiskSerial(String diskSerial) {
-		super.setSerial(diskSerial);
+		return _diskSerial;
 	}
 	
 	@Override

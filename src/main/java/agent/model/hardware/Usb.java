@@ -7,8 +7,10 @@ import oshi.SystemInfo;
  * @author Yaroslav
  */
 
-public final class Usb extends HardWare implements IUsb {
+public final class Usb implements IUsb {
 
+	private static String _usbName;
+	private static String _usbVendor;
 	private static String _usbDeviceId;
 	
 	public Usb(SystemInfo sysInfo) {
@@ -17,26 +19,20 @@ public final class Usb extends HardWare implements IUsb {
 	
 	public void load(SystemInfo sysInfo) {
 		sysInfo.getHardware().getUsbDevices(false).forEach(usb -> {
-			setUsbName(usb.getName());
-			setUsbgetVendor(usb.getVendor());
+			_usbName = usb.getName();
+			_usbVendor = usb.getVendor();
 			_usbDeviceId = usb.getUniqueDeviceId();
 		});
 	}
 	
+	@Override
 	public String getUsbName() {
-		return super.getName();
+		return _usbName;
 	}
 	
-	public void setUsbName(String usbName) {
-		super.setName(usbName);
-	}
-	
-	public String getUsbgetVendor() {
-		return super.getVendor();
-	}
-	
-	public void setUsbgetVendor(String usbVendor) {
-		super.setVendor(usbVendor);
+	@Override
+	public String getUsbVendor() {
+		return _usbVendor;
 	}
 
 	@Override

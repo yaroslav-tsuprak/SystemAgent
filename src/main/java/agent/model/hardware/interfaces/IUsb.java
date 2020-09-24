@@ -6,6 +6,10 @@ package agent.model.hardware.interfaces;
 
 public interface IUsb {
 	
+	String getUsbName();
+	
+	String getUsbVendor();
+	
 	String getUsbUniqueDeviceId();
 	
 }

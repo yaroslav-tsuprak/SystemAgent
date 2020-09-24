@@ -8,8 +8,11 @@ import oshi.hardware.Firmware;
  * @author Yaroslav
  */
 
-public final class Bios extends HardWare implements IBios {
+public final class Bios implements IBios {
 
+	private static String _name;
+	private static String _manufacturer;
+	private static String _version;
 	private static String _description;
 	private static String _releaseData;
 	
@@ -20,35 +23,26 @@ public final class Bios extends HardWare implements IBios {
 	public void load(SystemInfo sysInfo)
 	{
 		Firmware bios = sysInfo.getHardware().getComputerSystem().getFirmware();
-		setBiosName(bios.getManufacturer());
-		setBiosManufacturer(bios.getManufacturer());
-		setBiosVersion(bios.getVersion());
+		_name = bios.getName();
+		_manufacturer = bios.getManufacturer();
+		_version = bios.getVersion();
 		_description = bios.getDescription();
 		_releaseData = bios.getReleaseDate();
 	}
 	
+	@Override
 	public String getBiosName() {
-		return super.getName();
-	}
-
-	public void setBiosName(String biosName) {
-		super.setName(biosName);
+		return _name;
 	}
 	
+	@Override
 	public String getBiosManufacturer() {
-		return super.getManufacturer();
-	}
-	
-	public void setBiosManufacturer(String biosManufacturer) {
-		super.setManufacturer(biosManufacturer);
+		return _manufacturer;
 	}
 
+	@Override
 	public String getBiosVersion() {
-		return super.getVersion();
-	}
-	
-	public void setBiosVersion(String biosVersion) {
-		super.setVersion(biosVersion);
+		return _version;
 	}
 
 	@Override

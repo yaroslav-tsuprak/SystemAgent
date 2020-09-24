@@ -8,6 +8,8 @@ public interface IMemory {
 	
 	long getMemoryCapacity();
 	
+	String getMemoryManufacturer();
+	
 	String getMemoryType();
 
 }

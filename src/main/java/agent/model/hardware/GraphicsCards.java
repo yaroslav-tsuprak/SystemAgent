@@ -3,8 +3,10 @@ package agent.model.hardware;
 import agent.model.hardware.interfaces.IGraphicsCards;
 import oshi.SystemInfo;
 
-public final class GraphicsCards extends HardWare implements IGraphicsCards {
+public final class GraphicsCards implements IGraphicsCards {
 	
+	private static String _cardName;
+	private static String _cardVendor;
 	private static long _cardVRam;
 	
 	public GraphicsCards(SystemInfo sysInfo) {
@@ -13,26 +15,20 @@ public final class GraphicsCards extends HardWare implements IGraphicsCards {
 	
 	public void load(SystemInfo sysInfo) {
 		sysInfo.getHardware().getGraphicsCards().forEach(g -> { 
-			setGraphicsCardName(g.getName());
-			setGraphicsCardVendor(g.getVendor());
+			_cardName = g.getName();
+			_cardVendor = g.getVendor();
 			_cardVRam = g.getVRam();
 		});
 	}
 	
+	@Override
 	public String getGraphicsCardName() {
-		return super.getName();
+		return _cardName;
 	}
 	
-	public void setGraphicsCardName(String cardName) {
-		super.setName(cardName);
-	}
-	
+	@Override
 	public String getGraphicsCardVendor() {
-		return super.getVendor();
-	}
-	
-	public void setGraphicsCardVendor(String cardVendor) {
-		super.setVendor(cardVendor);
+		return _cardVendor;
 	}
 	
 	@Override

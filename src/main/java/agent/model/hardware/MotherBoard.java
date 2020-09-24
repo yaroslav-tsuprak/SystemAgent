@@ -1,5 +1,6 @@
 package agent.model.hardware;
 
+import agent.model.hardware.interfaces.IMotherBoard;
 import oshi.SystemInfo;
 import oshi.hardware.Baseboard;
 
@@ -7,7 +8,12 @@ import oshi.hardware.Baseboard;
  * @author Yaroslav
  */
 
-public final class MotherBoard extends HardWare {
+public final class MotherBoard implements IMotherBoard {
+	
+	private static String _motherboardManufacturer;
+	private static String _motherboardModel;
+	private static String _motherboardSerial;
+	private static String _motherboardVersion;
 
 	public MotherBoard(SystemInfo sysInfo) {
 		load(sysInfo);
@@ -15,41 +21,29 @@ public final class MotherBoard extends HardWare {
 	
 	public void load(SystemInfo sysInfo) {
 		Baseboard mb = sysInfo.getHardware().getComputerSystem().getBaseboard();
-		setMotherBoardManufacturer(mb.getManufacturer());
-		setMotherBoardModel(mb.getModel());
-		setMotherBoardSerial(mb.getSerialNumber());
-		setMotherBoardVersion(mb.getVersion());
+		_motherboardManufacturer = mb.getManufacturer();
+		_motherboardModel = mb.getModel();
+		_motherboardSerial = mb.getSerialNumber();
+		_motherboardVersion = mb.getVersion();
 	}
 	
+	@Override
 	public String getMotherBoardManufacturer() {
-		return super.getManufacturer();
+		return _motherboardManufacturer;
 	}
 	
+	@Override
 	public String getMotherBoardModel() {
-		return super.getModel();
+		return _motherboardModel;
 	}
 	
-	public String getMotherBoardVersion() {
-		return super.getVersion();
-	}
-	
+	@Override
 	public String getMotherBoardSerial() {
-		return super.getSerial();
+		return _motherboardSerial;
 	}
 	
-	public void setMotherBoardManufacturer(String manufacturer) {
-		super.setManufacturer(manufacturer);
-	}
-	
-	public void setMotherBoardModel(String model) {
-		super.setModel(model);
-	}
-	
-	public void setMotherBoardVersion(String version) {
-		super.setVersion(version);
-	}
-	
-	public void setMotherBoardSerial(String serial) {
-		super.setSerial(serial);
+	@Override
+	public String getMotherBoardVersion() {
+		return _motherboardVersion;
 	}
 }

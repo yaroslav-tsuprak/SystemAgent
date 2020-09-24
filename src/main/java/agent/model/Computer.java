@@ -17,8 +17,7 @@ import oshi.SystemInfo;
 
 public final class Computer {
 	
-	private static int _id;
-	private static String _hashId;
+	private static int _hashId;
 
 	private static OperationSystem _osInformation;
 	private static NetWork _networkInformation;
@@ -41,9 +40,7 @@ public final class Computer {
 		_usbInformation = new Usb(sysInfo);
 		_graphicsCard = new GraphicsCards(sysInfo);
 		_memory = new Memory(sysInfo);
-		// TODO
-		_id = 0;
-		_hashId = "0";
+		_hashId = createComputerHashId();
 	}
 
 	public OperationSystem getOperationSystemInfo() {
@@ -81,13 +78,14 @@ public final class Computer {
 	public Memory getMemoryInfo() {
 		return _memory;
 	}
-	
-	public int getComputerId() {
-		return _id;
-	}
 
-	public String getComputerHashId() {
+	public int getComputerHashId() {
 		return _hashId;
+	}
+	
+	private final int createComputerHashId() {
+		String code = _motherboardInformation.getMotherBoardSerial() + _cpuInformation.getCpuId() + _biosInformation.getBiosDescription() + _biosInformation.getBiosVersion();
+		return code.hashCode();
 	}
 
 	public static Computer getInstance() {

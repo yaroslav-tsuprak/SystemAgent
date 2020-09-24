@@ -6,6 +6,12 @@ package agent.model.hardware.interfaces;
 
 public interface IDisk {
 	
+	String getDiskName();
+	
+	String getDiskModel();
+	
+	String getDiskSerial();
+	
 	long getDiskSize();
 	
 }

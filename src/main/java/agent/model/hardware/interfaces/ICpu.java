@@ -5,6 +5,10 @@ package agent.model.hardware.interfaces;
  */
 
 public interface ICpu {
+	
+	String getCpuName();
+	
+	String getCpuVendor();
 
 	int getLogicalCpuCount();
 	
