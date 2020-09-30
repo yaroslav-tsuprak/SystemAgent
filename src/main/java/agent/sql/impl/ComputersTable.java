@@ -52,8 +52,8 @@ public class ComputersTable {
 		try (Connection con = DatabaseFactory.getInstance().getConnection();
 			PreparedStatement statement = con.prepareStatement(UPDATE_COMPUTER))
 		{
-			statement.setInt(1, level);
-			statement.setInt(2, computer.getMax());
+//			statement.setInt(1, level);
+//			statement.setInt(2, computer.getMax());
 
 			return statement.executeUpdate() >= 1;
 		}
