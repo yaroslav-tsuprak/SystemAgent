@@ -84,7 +84,7 @@ public final class Computer {
 	}
 	
 	private final int createComputerHashId() {
-		String code = _motherboardInformation.getMotherBoardSerial() + _cpuInformation.getCpuId() + _biosInformation.getBiosDescription() + _biosInformation.getBiosVersion();
+		String code = _motherboardInformation.getMotherBoardManufacturer() + _cpuInformation.getCpuId() + _biosInformation.getBiosDescription() + _biosInformation.getBiosVersion();
 		return code.hashCode();
 	}
 

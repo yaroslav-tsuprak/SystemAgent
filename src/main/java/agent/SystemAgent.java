@@ -51,5 +51,10 @@ public class SystemAgent {
 		System.out.println(comp.getMemoryInfo().getMemoryManufacturer());
 		System.out.println(comp.getMemoryInfo().getMemoryTotal());
 		System.out.println(comp.getMemoryInfo().getMemoryType());
+		System.out.println("--- NETWORK ---");
+		comp.getNetworkInfo().getAdapterName().forEach(System.out::println);
+		comp.getNetworkInfo().getIpAddress().forEach(System.out::println);
+		comp.getNetworkInfo().getMacAddress().forEach(System.out::println);
+		System.out.println(comp.getNetworkInfo().getDomainName());
 	}
 }
