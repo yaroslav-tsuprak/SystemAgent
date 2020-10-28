@@ -65,9 +65,9 @@ public class ComputersTable {
 	}
 	
 	/**
-	 * Restores the character data for the given {@code charId} from the database.
-	 * @param charId the character id whose data to restore.
-	 * @return a new entry of the character's data or {@code null} if there are no entries in the database.
+	 * Restores the computer data for the given {@code computerHashId} from the database.
+	 * @param computerHashId the computer hashid whose data to restore.
+	 * @return a new entry of the computer data or {@code null} if there are no entries in the database.
 	 */
 	public ComputerEntry restore(int computerHashId)
 	{
@@ -88,7 +88,6 @@ public class ComputersTable {
 		{
 			LOGGER.warn("Error occurred while loading computer data for computerHashId: {}", computerHashId, e);
 		}
-		
 		return null;
 	}
 	
@@ -97,23 +96,16 @@ public class ComputersTable {
 	 */
 	public static class ComputerEntry
 	{
-		private final String _a;
-		private final int _computerHashId;
+		private final String _osName;
 		
 		private ComputerEntry(ResultSet rset) throws SQLException
 		{
-			_a = rset.getString("a");
-			_computerHashId = rset.getInt("_computerHashId");
+			_osName = rset.getString("os_name");
 		}
 		
-		public String getA()
+		public String getOSFullName()
 		{
-			return _a;
-		}
-		
-		public int getcomputerHashId()
-		{
-			return _computerHashId;
+			return _osName;
 		}
 	}
 	

@@ -11,6 +11,8 @@ import agent.model.network.NetWork;
 import agent.model.os.OperationSystem;
 import oshi.SystemInfo;
 
+import java.util.List;
+
 /**
  * @author Yaroslav
  */
@@ -18,6 +20,7 @@ import oshi.SystemInfo;
 public final class Computer {
 	
 	private static int _hashId;
+	private static String _inventarNumber;
 
 	private static OperationSystem _osInformation;
 	private static NetWork _networkInformation;
@@ -41,6 +44,10 @@ public final class Computer {
 		_graphicsCard = new GraphicsCards(sysInfo);
 		_memory = new Memory(sysInfo);
 		_hashId = createComputerHashId();
+	}
+
+	public List<Object> getHardwareList() {
+		return List.of(getOperationSystemInfo(), getNetworkInfo(), getBiosInfo(), getCpuInfo(), getDiskInfo(), getMotherboardInfo(), getUsbInfo(), getGraphicCardInfo(), getMemoryInfo());
 	}
 
 	public OperationSystem getOperationSystemInfo() {
@@ -86,6 +93,14 @@ public final class Computer {
 	private final int createComputerHashId() {
 		String code = _motherboardInformation.getMotherBoardManufacturer() + _cpuInformation.getCpuId() + _biosInformation.getBiosDescription() + _biosInformation.getBiosVersion();
 		return code.hashCode();
+	}
+
+	public void setInventarNumber(String invNumber) {
+		_inventarNumber = invNumber;
+	}
+
+	public String getInventarNumber() {
+		return _inventarNumber;
 	}
 
 	public static Computer getInstance() {

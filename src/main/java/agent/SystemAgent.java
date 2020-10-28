@@ -1,6 +1,12 @@
 package agent;
 
 import agent.model.Computer;
+import agent.model.hardware.*;
+import agent.model.network.NetWork;
+import agent.model.os.OperationSystem;
+import agent.sql.impl.ComputersTable;
+
+import java.util.Map;
 
 /**
  * Hardware system agent
@@ -9,11 +15,51 @@ import agent.model.Computer;
 
 public class SystemAgent {
 
+	private static Map<String, String> changes = null;
+
 	public static void main(String[] args) {
 		Computer comp = Computer.getInstance();
+		ComputersTable.ComputerEntry computerEntry = ComputersTable.getInstance().restore(comp.getComputerHashId());
+		if (computerEntry != null) {
+			comp.getHardwareList().forEach(o -> {
+				if (o instanceof OperationSystem) {
+					((OperationSystem) o).getParamsList().forEach(param -> {
+						if (!param.equals(computerEntry.getOSFullName())) {
+							changes.put("os_name", param);
+						}
+					});
+				}
+				if (o instanceof NetWork) {
+
+				}
+				if (o instanceof Bios) {
+
+				}
+				if (o instanceof Cpu) {
+
+				}
+				if (o instanceof Disk) {
+
+				}
+				if (o instanceof MotherBoard) {
+
+				}
+				if (o instanceof Usb) {
+
+				}
+				if (o instanceof GraphicsCards) {
+
+				}
+				if (o instanceof Memory) {
+
+				}
+			});
+		}
 
 		System.out.println("--- Computer Hash ID ---");
 		System.out.println(comp.getComputerHashId());
+		System.out.println("--- Computer OS ---");
+		System.out.println(comp.getOperationSystemInfo().getOSFullName());
 		System.out.println("--- BIOS ---");
 		System.out.println(comp.getBiosInfo().getBiosDescription());
 		System.out.println(comp.getBiosInfo().getBiosManufacturer());
