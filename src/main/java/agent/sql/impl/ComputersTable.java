@@ -20,20 +20,21 @@ public class ComputersTable {
 	
 	// SQL queries
 	private static final String INSERT_COMPUTER = "INSERT INTO computers (computerHashId, createDate) values (?,?)";
+	private static final String INSERT_COMPUTER_PARAMS = "INSERT INTO computer_params (computerHashId, createDate) values (?,?)";
 	private static final String UPDATE_COMPUTER = "UPDATE computers SET level=? WHERE computerHashId=?";
 	private static final String SELECT_COMPUTER = "SELECT * FROM computers WHERE computerHashId=?";
 
 	/**
 	 * Create a new computer in the computer table of the database.
-	 * @param computer the computer which to save.
+	 * @param computerParameters the computer which to save.
 	 * @return {@code true} if changes to database were made, {@code false} otherwise.
 	 */
-	public boolean create(Computer computer)
+	public boolean create(ParamsSet computerParameters)
 	{
 		try (Connection con = DatabaseFactory.getInstance().getConnection();
 			PreparedStatement statement = con.prepareStatement(INSERT_COMPUTER))
 		{
-			statement.setInt(1, computer.getComputerHashId());
+//			statement.setInt(1, computerParameters.get(""));
 			return statement.executeUpdate() >= 1;
 		}
 		catch (Exception e)

@@ -21,9 +21,13 @@ public class SystemAgent {
 	public static void main(String[] args) {
 		ComputerParameters computerOnline = new ComputerParameters(new Computer());
 		ComputerParameters computerFromDatabase = ComputersTable.getInstance().restore(computerOnline.getParamSet().getInt("hash_id"));
-		ParamsSet computerDiff = new ComputersEquality(computerOnline, computerFromDatabase).getDiff();
-		if (!computerDiff.isEmpty() || computerDiff != null) {
-			ComputersTable.getInstance().store(computerDiff);
+		if (computerFromDatabase != null) {
+			ParamsSet computerDiff = new ComputersEquality(computerOnline, computerFromDatabase).getDiff();
+			if (!computerDiff.isEmpty() || computerDiff != null) {
+				ComputersTable.getInstance().store(computerDiff);
+			}
+		} else {
+			ComputersTable.getInstance().create(computerOnline.getParamSet());
 		}
 	}
 }
