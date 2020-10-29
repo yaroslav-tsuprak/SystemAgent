@@ -32,7 +32,7 @@ public final class Computer {
 	private static GraphicsCards _graphicsCard;
 	private static Memory _memory;
 
-	private Computer() {
+	public Computer() {
 		SystemInfo sysInfo = new SystemInfo();		
 		_osInformation = new OperationSystem(sysInfo);
 		_networkInformation = new NetWork(sysInfo);
@@ -101,14 +101,5 @@ public final class Computer {
 
 	public String getInventarNumber() {
 		return _inventarNumber;
-	}
-
-	public static Computer getInstance() {
-		return SingletonHolder.INSTANCE;
-	}
-
-	private static class SingletonHolder
-	{
-		protected static final Computer INSTANCE = new Computer();
 	}
 }

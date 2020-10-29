@@ -6,6 +6,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+import agent.model.ComputerParameters;
+import agent.utils.ParamsSet;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -43,10 +45,10 @@ public class ComputersTable {
 	
 	/**
 	 * Stores the computer base data in the database.
-	 * @param computer the computer which to save.
+	 * @param diffs the computer which to save.
 	 * @return {@code true} if changes to database were made, {@code false} otherwise.
 	 */
-	public boolean store(Computer computer)
+	public boolean store(ParamsSet diffs)
 	{
 		
 		try (Connection con = DatabaseFactory.getInstance().getConnection();
@@ -59,7 +61,7 @@ public class ComputersTable {
 		}
 		catch (Exception e)
 		{
-			LOGGER.warn("Could not store comp base data for computer: {}", computer, e);
+			LOGGER.warn("Could not store comp base data for computer: {}", diffs, e);
 			return false;
 		}
 	}
@@ -69,7 +71,7 @@ public class ComputersTable {
 	 * @param computerHashId the computer hashid whose data to restore.
 	 * @return a new entry of the computer data or {@code null} if there are no entries in the database.
 	 */
-	public ComputerEntry restore(int computerHashId)
+	public ComputerParameters restore(int computerHashId)
 	{
 		try (Connection con = DatabaseFactory.getInstance().getConnection();
 			PreparedStatement ps = con.prepareStatement(SELECT_COMPUTER))
@@ -80,7 +82,7 @@ public class ComputersTable {
 			{
 				if (rs.next())
 				{
-					return new ComputerEntry(rs);
+					return new ComputerParameters(rs);
 				}
 			}
 		}
@@ -90,25 +92,7 @@ public class ComputersTable {
 		}
 		return null;
 	}
-	
-	/**
-	 * A class that holds all variables within the {@code characters} database table.
-	 */
-	public static class ComputerEntry
-	{
-		private final String _osName;
-		
-		private ComputerEntry(ResultSet rset) throws SQLException
-		{
-			_osName = rset.getString("os_name");
-		}
-		
-		public String getOSFullName()
-		{
-			return _osName;
-		}
-	}
-	
+
 	public static ComputersTable getInstance()
 	{
 		return SingletonHolder.INSTANCE;

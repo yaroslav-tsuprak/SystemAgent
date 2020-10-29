@@ -12,7 +12,7 @@ public interface INetWork {
 
 	String getDomainName();
 	
-	List<String> getAdapterName();
+	List<String> getAdaptersNames();
 	
 	List<String> getIpAddress();
 	
