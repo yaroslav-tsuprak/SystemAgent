@@ -6,6 +6,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+import agent.enums.Parameters;
 import agent.model.ComputerParameters;
 import agent.utils.ParamsSet;
 import org.slf4j.Logger;
@@ -19,7 +20,7 @@ public class ComputersTable {
 	private static final Logger LOGGER = LoggerFactory.getLogger(ComputersTable.class);
 	
 	// SQL queries
-	private static final String INSERT_COMPUTER = "INSERT INTO computers (hash_id,serial_number,computer_state,) values (?,?,?)";
+	private static final String INSERT_COMPUTER = "INSERT INTO computers (hash_id) values (?)";
 	private static final String INSERT_COMPUTER_PARAMS = "INSERT INTO computer_params (" +
 			"hash_id,os_full_name,bios_description,bios_manufacturer,bios_name,bios_release_date,bios_version,cpu_id,cpu_identifier,cpu_name,cpu_vendor" +
 			"logical_cpu_count,physical_cpu_count,motherboard_manufacturer,motherboard_model,motherboard_serial,motherboard_version,disk_model," +
@@ -31,15 +32,15 @@ public class ComputersTable {
 
 	/**
 	 * Create a new computer in the computer table of the database.
-	 * @param computerParameters the computer which to save.
+	 * @param hash_id the computer which to save.
 	 * @return {@code true} if changes to database were made, {@code false} otherwise.
 	 */
-	public boolean create(ParamsSet computerParameters)
+	public boolean createComputer(String hash_id)
 	{
 		try (Connection con = DatabaseFactory.getInstance().getConnection();
 			PreparedStatement statement = con.prepareStatement(INSERT_COMPUTER))
 		{
-//			statement.setInt(1, computerParameters.get(""));
+			statement.setString(1, hash_id);
 			return statement.executeUpdate() >= 1;
 		}
 		catch (Exception e)
@@ -48,7 +49,35 @@ public class ComputersTable {
 			return false;
 		}
 	}
-	
+
+	/**
+	 * Create a new computer in the computer table of the database.
+	 * @param computerParameters the computer which to save.
+	 * @return {@code true} if changes to database were made, {@code false} otherwise.
+	 */
+	public boolean createComputerParameters(ParamsSet computerParameters)
+	{
+		try (Connection con = DatabaseFactory.getInstance().getConnection();
+			 PreparedStatement statement = con.prepareStatement(INSERT_COMPUTER_PARAMS))
+		{
+			Parameters.VALUES.forEach(e -> saveToDatabase(statement, e, computerParameters));
+			return statement.executeUpdate() >= 1;
+		}
+		catch (Exception e)
+		{
+			LOGGER.error("Could not insert computer prameters data: " + e.getMessage(), e);
+			return false;
+		}
+	}
+
+	public void saveToDatabase(PreparedStatement statement, Parameters param, ParamsSet computerParameters) {
+		try {
+			statement.setString(param.getFieldId(), computerParameters.getString(param.getFieldName()));
+		} catch (SQLException err) {
+			err.printStackTrace();
+		}
+	}
+
 	/**
 	 * Stores the computer base data in the database.
 	 * @param diffs the computer which to save.

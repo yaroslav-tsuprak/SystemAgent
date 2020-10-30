@@ -63,17 +63,25 @@ public enum Parameters {
     }
 
     /**
+     * @return the field name.
+     */
+    public String getFieldName()
+    {
+        return _fieldName;
+    }
+
+    /**
      * Finds the {@code FieldName} by its fieldId
      * @param fieldId the fieldId
      * @return the {@code FieldName} if its found, {@code null} otherwise.
      */
-    public static Parameters findFieldNameById(int fieldId)
+    public static String findFieldNameById(int fieldId)
     {
         for (Parameters parameters : VALUES)
         {
             if (parameters.getFieldId() == fieldId)
             {
-                return parameters;
+                return parameters.getFieldName();
             }
         }
         return null;
