@@ -19,8 +19,13 @@ public class ComputersTable {
 	private static final Logger LOGGER = LoggerFactory.getLogger(ComputersTable.class);
 	
 	// SQL queries
-	private static final String INSERT_COMPUTER = "INSERT INTO computers (computerHashId, createDate) values (?,?)";
-	private static final String INSERT_COMPUTER_PARAMS = "INSERT INTO computer_params (computerHashId, createDate) values (?,?)";
+	private static final String INSERT_COMPUTER = "INSERT INTO computers (hash_id,serial_number,computer_state,) values (?,?,?)";
+	private static final String INSERT_COMPUTER_PARAMS = "INSERT INTO computer_params (" +
+			"hash_id,os_full_name,bios_description,bios_manufacturer,bios_name,bios_release_date,bios_version,cpu_id,cpu_identifier,cpu_name,cpu_vendor" +
+			"logical_cpu_count,physical_cpu_count,motherboard_manufacturer,motherboard_model,motherboard_serial,motherboard_version,disk_model," +
+			"disk_name,disk_serial,disk_size,usb_name,usb_unique_device_id,usb_vendor,graphics_card_name,graphics_card_vendor,graphics_card_vram," +
+			"memory_bank_label,memory_capacity,memory_manufacturer,memory_total,memory_type,adapters_names,ip_address,mac_address,netbios_full_name) " +
+			"values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
 	private static final String UPDATE_COMPUTER = "UPDATE computers SET level=? WHERE computerHashId=?";
 	private static final String SELECT_COMPUTER = "SELECT * FROM computers WHERE computerHashId=?";
 

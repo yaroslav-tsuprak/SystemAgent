@@ -48,7 +48,7 @@ public class ComputerParameters {
         set.set("memory_type", resultSet.getString("memory_type"));
         set.set("adapters_names", resultSet.getString("adapters_names"));
         set.set("ip_address", resultSet.getString("ip_address"));
-        set.set("ip_mac_address", resultSet.getString("ip_mac_address"));
+        set.set("mac_address", resultSet.getString("mac_address"));
         set.set("netbios_full_name", resultSet.getString("netbios_full_name"));
     }
 
@@ -87,7 +87,7 @@ public class ComputerParameters {
         set.set("memory_type", pc.getMemoryInfo().getMemoryType());
         set.set("adapters_names", pc.getNetworkInfo().getAdaptersNames());
         set.set("ip_address", pc.getNetworkInfo().getIpAddress());
-        set.set("ip_mac_address", pc.getNetworkInfo().getMacAddress());
+        set.set("mac_address", pc.getNetworkInfo().getMacAddress());
         set.set("netbios_full_name", pc.getNetworkInfo().getDomainName());
     }
 

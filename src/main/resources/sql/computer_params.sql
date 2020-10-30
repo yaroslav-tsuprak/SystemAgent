@@ -34,7 +34,12 @@ CREATE TABLE `computer_params` (
     `memory_type` varchar(25) COLLATE utf8_unicode_ci NOT NULL DEFAULT '',
     `adapters_names` varchar(255) COLLATE utf8_unicode_ci NOT NULL DEFAULT '',
     `ip_address` varchar(255) COLLATE utf8_unicode_ci NOT NULL DEFAULT '',
-    `ip_mac_address` varchar(255) COLLATE utf8_unicode_ci NOT NULL DEFAULT '',
+    `mac_address` varchar(255) COLLATE utf8_unicode_ci NOT NULL DEFAULT '',
     `netbios_full_name` varchar(128) COLLATE utf8_unicode_ci NOT NULL DEFAULT '',
-    FOREIGN KEY (`hash_id`) REFERENCES computers (`hash_id`)
+    PRIMARY KEY `id` (`id`),
+    CONSTRAINT `hash_id_ibfk_1`
+    FOREIGN KEY (hash_id)
+    REFERENCES computers (hash_id)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE
 ) ENGINE=MyISAM AUTO_INCREMENT=0 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
