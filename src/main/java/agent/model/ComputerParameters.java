@@ -14,7 +14,7 @@ public class ComputerParameters {
     ParamsSet set = new ParamsSet();
 
     public ComputerParameters(ResultSet resultSet) throws SQLException {
-        set.set("hash_id", resultSet.getString("hash_id"));
+        set.set("computer_hash_id", resultSet.getString("computer_hash_id"));
         set.set("os_full_name", resultSet.getString("os_full_ame"));
         set.set("bios_description", resultSet.getString("bios_description"));
         set.set("bios_manufacturer", resultSet.getString("bios_manufacturer"));
@@ -53,7 +53,7 @@ public class ComputerParameters {
     }
 
     public ComputerParameters(Computer pc) {
-        set.set("hash_id", pc.getComputerHashId());
+        set.set("computer_hash_id", pc.getComputerHashId());
         set.set("os_full_name", pc.getOperationSystemInfo().getOSFullName());
         set.set("bios_description", pc.getBiosInfo().getBiosDescription());
         set.set("bios_manufacturer", pc.getBiosInfo().getBiosManufacturer());

@@ -19,15 +19,19 @@ import java.util.Map;
 public class SystemAgent {
 
 	public static void main(String[] args) {
-		ComputerParameters computerOnline = new ComputerParameters(new Computer());
-		ComputerParameters computerFromDatabase = ComputersTable.getInstance().restore(computerOnline.getParamSet().getInt("hash_id"));
+		final ComputerParameters computerOnline = new ComputerParameters(new Computer());
+		final String _computerHashId = computerOnline.getParamSet().getString("computer_hash_id");
+		final ComputerParameters computerFromDatabase = ComputersTable.getInstance().restore(_computerHashId);
 		if (computerFromDatabase != null) {
 			ParamsSet computerDiff = new ComputersEquality(computerOnline, computerFromDatabase).getDiff();
 			if (!computerDiff.isEmpty() || computerDiff != null) {
-				ComputersTable.getInstance().store(computerDiff);
+				ComputersTable.getInstance().storeComputerDiff(computerOnline.getParamSet(), computerDiff);
 			}
 		} else {
-			ComputersTable.getInstance().create(computerOnline.getParamSet());
+			// Create new Computer in database
+			ComputersTable.getInstance().createComputer(_computerHashId);
+			// Set params to new Computer
+			ComputersTable.getInstance().createComputerParameters(computerOnline.getParamSet());
 		}
 	}
 }

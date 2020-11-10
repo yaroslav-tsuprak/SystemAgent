@@ -8,7 +8,7 @@ import java.util.List;
 
 public enum EventMessages {
 
-    MESSAGE_HASH_ID (1, "hash_id"),
+    MESSAGE_HASH_ID (1, "Computer hash id is changed"),
     MESSAGE_OS_FULL_NAME (2, "Operating system is changed"),
     MESSAGE_BIOS_DESCRIPTION (3, "BIOS is changes"),
     MESSAGE_BIOS_MANUFACTURER (4, "BIOS manufacturer is changed"),

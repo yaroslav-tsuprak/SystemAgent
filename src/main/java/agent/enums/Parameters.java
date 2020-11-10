@@ -8,7 +8,7 @@ import java.util.List;
 
 public enum Parameters {
 
-    FIELD_HASH_ID (1, "hash_id"),
+    FIELD_HASH_ID (1, "computer_hash_id"),
     FIELD_OS_FULL_NAME (2, "os_full_name"),
     FIELD_BIOS_DESCRIPTION (3, "bios_description"),
     FIELD_BIOS_MANUFACTURER (4, "bios_manufacturer"),

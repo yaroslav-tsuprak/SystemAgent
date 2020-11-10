@@ -19,14 +19,12 @@
 package agent.sql;
 
 import java.sql.Connection;
+import java.sql.DriverManager;
 import java.sql.SQLException;
 
-import javax.sql.DataSource;
-
+import agent.config.Configuration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import com.mchange.v2.c3p0.ComboPooledDataSource;
 
 /**
  * This class manages the database connections.
@@ -37,56 +35,11 @@ public final class DatabaseFactory
 	
 	private static DatabaseFactory INSTANCE;
 	
-	private ComboPooledDataSource _dataSource;
-	
 	private DatabaseFactory()
 	{
 		// visibility
 	}
-	
-	public void init(DataSourceInitializer config) throws Exception
-	{
-		_dataSource = config.initDataSource();
-		
-		/* Test the connection. */
-		_dataSource.getConnection().close();
-		
-		LOGGER.info("Initialized DB '{}' as user '{}' using '{}' driver.", config.getJdbcURL(), config.getUsername(), config.getDriver());
-	}
-	
-	private void closeSource()
-	{
-		if (_dataSource != null)
-		{
-			_dataSource.close();
-		}
-		
-		// Is this really necessary?
-		_dataSource = null;
-	}
-	
-	/**
-	 * Shutdown.
-	 */
-	public static void shutdown()
-	{
-		if (INSTANCE == null)
-		{
-			return;
-		}
-		
-		LOGGER.info("Shutting down.");
-		
-		try
-		{
-			DatabaseFactory.getInstance().closeSource();
-		}
-		catch (Exception e)
-		{
-			LOGGER.warn("", e);
-		}
-	}
-	
+
 	public static DatabaseFactory getInstance()
 	{
 		if (INSTANCE == null)
@@ -102,16 +55,7 @@ public final class DatabaseFactory
 		
 		return INSTANCE;
 	}
-	
-	/**
-	 * Gets implementation of {@link DataSource}.
-	 * @return data source
-	 */
-	public DataSource getDataSource()
-	{
-		return _dataSource;
-	}
-	
+
 	/**
 	 * Gets the connection.
 	 * @return the connection
@@ -120,18 +64,19 @@ public final class DatabaseFactory
 	{
 		try
 		{
-			return _dataSource.getConnection();
+			Connection con = DriverManager.getConnection(Configuration.DB_URL, Configuration.DB_USER, Configuration.DB_PASSWORD);
+			return con;
 		}
 		catch (SQLException e)
 		{
 			throw new LostConnectionException("Couldn't connect to the database!", e);
 		}
 	}
-	
+
 	private static final class LostConnectionException extends RuntimeException
 	{
 		private static final long serialVersionUID = -8014108841473905011L;
-		
+
 		LostConnectionException(String message, Throwable cause)
 		{
 			super(message, cause);

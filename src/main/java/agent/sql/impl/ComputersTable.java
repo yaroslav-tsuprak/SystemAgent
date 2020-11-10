@@ -20,15 +20,15 @@ public class ComputersTable {
 	private static final Logger LOGGER = LoggerFactory.getLogger(ComputersTable.class);
 	
 	// SQL queries
-	private static final String INSERT_COMPUTER = "INSERT INTO computers (hash_id) values (?)";
+	private static final String INSERT_COMPUTER = "INSERT INTO computers (computer_hash_id) values (?)";
 	private static final String INSERT_COMPUTER_PARAMS = "INSERT INTO computer_params (" +
-			"hash_id,os_full_name,bios_description,bios_manufacturer,bios_name,bios_release_date,bios_version,cpu_id,cpu_identifier,cpu_name,cpu_vendor" +
+			"computer_hash_id,os_full_name,bios_description,bios_manufacturer,bios_name,bios_release_date,bios_version,cpu_id,cpu_identifier,cpu_name,cpu_vendor" +
 			"logical_cpu_count,physical_cpu_count,motherboard_manufacturer,motherboard_model,motherboard_serial,motherboard_version,disk_model," +
 			"disk_name,disk_serial,disk_size,usb_name,usb_unique_device_id,usb_vendor,graphics_card_name,graphics_card_vendor,graphics_card_vram," +
 			"memory_bank_label,memory_capacity,memory_manufacturer,memory_total,memory_type,adapters_names,ip_address,mac_address,netbios_full_name) " +
 			"values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
-	private static final String UPDATE_COMPUTER = "UPDATE computers SET level=? WHERE computerHashId=?";
-	private static final String SELECT_COMPUTER = "SELECT * FROM computers WHERE computerHashId=?";
+	private static final String UPDATE_COMPUTER = "UPDATE computers SET level=? WHERE computer_hash_id=?";
+	private static final String SELECT_COMPUTER = "SELECT * FROM computers WHERE computer_hash_id=?";
 
 	/**
 	 * Create a new computer in the computer table of the database.
@@ -83,7 +83,7 @@ public class ComputersTable {
 	 * @param diffs the computer which to save.
 	 * @return {@code true} if changes to database were made, {@code false} otherwise.
 	 */
-	public boolean store(ParamsSet diffs)
+	public boolean storeComputerDiff(ParamsSet computerOnline, ParamsSet diffs)
 	{
 		
 		try (Connection con = DatabaseFactory.getInstance().getConnection();
@@ -106,12 +106,12 @@ public class ComputersTable {
 	 * @param computerHashId the computer hashid whose data to restore.
 	 * @return a new entry of the computer data or {@code null} if there are no entries in the database.
 	 */
-	public ComputerParameters restore(int computerHashId)
+	public ComputerParameters restore(String computerHashId)
 	{
 		try (Connection con = DatabaseFactory.getInstance().getConnection();
 			PreparedStatement ps = con.prepareStatement(SELECT_COMPUTER))
 		{
-			ps.setInt(1, computerHashId);
+			ps.setString(1, computerHashId);
 			
 			try (ResultSet rs = ps.executeQuery())
 			{
