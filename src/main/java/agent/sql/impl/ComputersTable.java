@@ -73,7 +73,7 @@ public class ComputersTable {
 
 	public void saveToDatabase(PreparedStatement statement, Parameters param, ParamsSet computerParameters) {
 		try {
-			statement.setString(param.getFieldId(), computerParameters.getString(param.getFieldName()));
+			statement.setString(param.getFieldId(), computerParameters.getMap().);
 		} catch (SQLException err) {
 			err.printStackTrace();
 		}

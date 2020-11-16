@@ -35,9 +35,4 @@ public final class GraphicsCards implements IGraphicsCards {
 	public long getGraphicsCardVRam() {
 		return _cardVRam;
 	}
-
-	@Override
-	public void setGraphicsCardVRam(long vram) {
-		_cardVRam = vram;
-	}
 }
