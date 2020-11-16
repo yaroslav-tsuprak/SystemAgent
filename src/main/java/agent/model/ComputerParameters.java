@@ -13,6 +13,8 @@ public class ComputerParameters {
 
     ParamsSet set = new ParamsSet();
 
+    public ComputerParameters() {}
+
     public ComputerParameters(ResultSet resultSet) throws SQLException {
         set.set("computer_hash_id", resultSet.getString("computer_hash_id"));
         set.set("os_full_name", resultSet.getString("os_full_ame"));
@@ -25,8 +27,8 @@ public class ComputerParameters {
         set.set("cpu_identifier", resultSet.getString("cpu_identifier"));
         set.set("cpu_name", resultSet.getString("cpu_name"));
         set.set("cpu_vendor", resultSet.getString("cpu_vendor"));
-        set.set("logical_cpu_count", resultSet.getString("logical_cpu_count"));
-        set.set("physical_cpu_count", resultSet.getString("physical_cpu_count"));
+        set.set("logical_cpu_count", resultSet.getInt("logical_cpu_count"));
+        set.set("physical_cpu_count", resultSet.getInt("physical_cpu_count"));
         set.set("motherboard_manufacturer", resultSet.getString("motherboard_manufacturer"));
         set.set("motherboard_model", resultSet.getString("motherboard_model"));
         set.set("motherboard_serial", resultSet.getString("motherboard_serial"));
@@ -34,17 +36,17 @@ public class ComputerParameters {
         set.set("disk_model", resultSet.getString("disk_model"));
         set.set("disk_name", resultSet.getString("disk_name"));
         set.set("disk_serial", resultSet.getString("disk_serial"));
-        set.set("disk_size", resultSet.getString("disk_size"));
+        set.set("disk_size", resultSet.getLong("disk_size"));
         set.set("usb_name", resultSet.getString("usb_name"));
         set.set("usb_unique_device_id", resultSet.getString("usb_unique_device_id"));
         set.set("usb_vendor", resultSet.getString("usb_vendor"));
         set.set("graphics_card_name", resultSet.getString("graphics_card_name"));
         set.set("graphics_card_vendor", resultSet.getString("graphics_card_vendor"));
-        set.set("graphics_card_vram", resultSet.getString("graphics_card_vram"));
+        set.set("graphics_card_vram", resultSet.getLong("graphics_card_vram"));
         set.set("memory_bank_label", resultSet.getString("memory_bank_label"));
-        set.set("memory_capacity", resultSet.getString("memory_capacity"));
+        set.set("memory_capacity", resultSet.getLong("memory_capacity"));
         set.set("memory_manufacturer", resultSet.getString("memory_manufacturer"));
-        set.set("memory_total", resultSet.getString("memory_total"));
+        set.set("memory_total", resultSet.getLong("memory_total"));
         set.set("memory_type", resultSet.getString("memory_type"));
         set.set("adapters_names", resultSet.getString("adapters_names"));
         set.set("ip_address", resultSet.getString("ip_address"));

@@ -29,6 +29,7 @@ public class ComputersTable {
 			"values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
 	private static final String UPDATE_COMPUTER = "UPDATE computers SET level=? WHERE computer_hash_id=?";
 	private static final String SELECT_COMPUTER = "SELECT * FROM computers WHERE computer_hash_id=?";
+	private static final String SELECT_COMPUTER_PARAMS = "SELECT * FROM computer_params WHERE computer_hash_id=?";
 
 	/**
 	 * Create a new computer in the computer table of the database.
@@ -83,7 +84,7 @@ public class ComputersTable {
 	 * @param diffs the computer which to save.
 	 * @return {@code true} if changes to database were made, {@code false} otherwise.
 	 */
-	public boolean storeComputerDiff(ParamsSet computerOnline, ParamsSet diffs)
+	public boolean saveComputerDiff(ParamsSet computerOnline, ParamsSet diffs)
 	{
 		
 		try (Connection con = DatabaseFactory.getInstance().getConnection();
@@ -102,11 +103,11 @@ public class ComputersTable {
 	}
 	
 	/**
-	 * Restores the computer data for the given {@code computerHashId} from the database.
+	 * Search the computer for the given {@code computerHashId} from the database.
 	 * @param computerHashId the computer hashid whose data to restore.
-	 * @return a new entry of the computer data or {@code null} if there are no entries in the database.
+	 * @return true or false.
 	 */
-	public ComputerParameters restore(String computerHashId)
+	public boolean selectComputer(String computerHashId)
 	{
 		try (Connection con = DatabaseFactory.getInstance().getConnection();
 			PreparedStatement ps = con.prepareStatement(SELECT_COMPUTER))
@@ -117,7 +118,7 @@ public class ComputersTable {
 			{
 				if (rs.next())
 				{
-					return new ComputerParameters(rs);
+					return true;
 				}
 			}
 		}
@@ -125,7 +126,52 @@ public class ComputersTable {
 		{
 			LOGGER.warn("Error occurred while loading computer data for computerHashId: {}", computerHashId, e);
 		}
-		return null;
+		return false;
+	}
+
+	/**
+	 * Get the parameters of computer for the given {@code computerHashId} from the database.
+	 * @param computerHashId the computer hashid whose data to restore.
+	 * @return true or false.
+	 */
+	public ComputerParameters selectComputerParameters(String computerHashId)
+	{
+		ComputerParameters cp = null;
+		try (Connection con = DatabaseFactory.getInstance().getConnection();
+			 PreparedStatement ps = con.prepareStatement(SELECT_COMPUTER_PARAMS))
+		{
+			ps.setString(1, computerHashId);
+
+			try (ResultSet rs = ps.executeQuery())
+			{
+				if (rs.next()) {
+					cp.setParamSet(new ComputerParameters(rs).getParamSet());
+				}
+			}
+		}
+		catch (SQLException e)
+		{
+			LOGGER.warn("Error occurred while loading computer data for computerHashId: {}", computerHashId, e);
+		}
+		return cp;
+	}
+
+	public void createComputerWithParameters (String computerHashId, ParamsSet computerParameters)
+	{
+		if (createComputer(computerHashId))
+		{
+			createComputerParameters(computerParameters);
+		}
+	}
+
+	public ComputerParameters selectComputerWithParams(String computerHashId)
+	{
+		ComputerParameters cp = null;
+		if (selectComputer(computerHashId))
+		{
+			cp = selectComputerParameters(computerHashId);
+		}
+		return cp;
 	}
 
 	public static ComputersTable getInstance()

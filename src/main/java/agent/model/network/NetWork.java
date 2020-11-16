@@ -15,9 +15,9 @@ import oshi.software.os.NetworkParams;
 public final class NetWork implements INetWork {
 	private static String _hostName;
 	private static String _domainName;
-	private static List<String> _adaptersNames = new ArrayList<String>();
-	private static List<String> _ipAddress = new ArrayList<String>();
-	private static List<String> _macAddress = new ArrayList<String>();
+	private static String _adaptersNames;
+	private static String _ipAddress;
+	private static String _macAddress;
 	
 	public NetWork(SystemInfo sysInfo) {
 		load(sysInfo);
@@ -29,9 +29,9 @@ public final class NetWork implements INetWork {
 		_domainName = net.getDomainName();
 
 		sysInfo.getHardware().getNetworkIFs().forEach(n -> {
-			_adaptersNames.add(n.getDisplayName());
-			_ipAddress.add(Arrays.toString(n.getIPv4addr()));
-			_macAddress.add(n.getMacaddr());
+			_adaptersNames.join(n.getDisplayName());
+			_ipAddress.join(Arrays.toString(n.getIPv4addr()));
+			_macAddress.join(n.getMacaddr());
 		});
 	}
 
@@ -46,17 +46,17 @@ public final class NetWork implements INetWork {
 	}
 
 	@Override
-	public List<String> getAdaptersNames() {
+	public String getAdaptersNames() {
 		return _adaptersNames;
 	}
 
 	@Override
-	public List<String> getIpAddress() {
+	public String getIpAddress() {
 		return _ipAddress;
 	}
 
 	@Override
-	public List<String> getMacAddress() {
+	public String getMacAddress() {
 		return _macAddress;
 	}
 }

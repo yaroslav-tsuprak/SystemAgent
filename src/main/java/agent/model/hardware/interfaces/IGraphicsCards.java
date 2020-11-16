@@ -7,7 +7,4 @@ public interface IGraphicsCards {
 	String getGraphicsCardVendor();
 	
 	long getGraphicsCardVRam();
-	
-	void setGraphicsCardVRam(long cardVRam);
-
 }

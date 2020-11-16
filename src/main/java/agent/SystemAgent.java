@@ -21,17 +21,15 @@ public class SystemAgent {
 	public static void main(String[] args) {
 		final ComputerParameters computerOnline = new ComputerParameters(new Computer());
 		final String _computerHashId = computerOnline.getParamSet().getString("computer_hash_id");
-		final ComputerParameters computerFromDatabase = ComputersTable.getInstance().restore(_computerHashId);
+		final ParamsSet computerParamSet = computerOnline.getParamSet();
+		final ComputerParameters computerFromDatabase = ComputersTable.getInstance().selectComputerWithParams(_computerHashId);
 		if (computerFromDatabase != null) {
 			ParamsSet computerDiff = new ComputersEquality(computerOnline, computerFromDatabase).getDiff();
 			if (!computerDiff.isEmpty() || computerDiff != null) {
-				ComputersTable.getInstance().storeComputerDiff(computerOnline.getParamSet(), computerDiff);
+				ComputersTable.getInstance().saveComputerDiff(computerParamSet, computerDiff);
 			}
 		} else {
-			// Create new Computer in database
-			ComputersTable.getInstance().createComputer(_computerHashId);
-			// Set params to new Computer
-			ComputersTable.getInstance().createComputerParameters(computerOnline.getParamSet());
+			ComputersTable.getInstance().createComputerWithParameters(_computerHashId, computerParamSet);
 		}
 	}
 }

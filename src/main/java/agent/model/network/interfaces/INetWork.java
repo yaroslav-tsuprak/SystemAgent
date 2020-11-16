@@ -12,10 +12,10 @@ public interface INetWork {
 
 	String getDomainName();
 	
-	List<String> getAdaptersNames();
+	String getAdaptersNames();
 	
-	List<String> getIpAddress();
+	String getIpAddress();
 	
-	List<String> getMacAddress();
+	String getMacAddress();
 
 }
