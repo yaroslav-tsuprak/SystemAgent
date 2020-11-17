@@ -18,7 +18,7 @@ import agent.sql.DatabaseFactory;
 public class ComputersTable {
 	
 	private static final Logger LOGGER = LoggerFactory.getLogger(ComputersTable.class);
-	
+
 	// SQL queries
 	private static final String INSERT_COMPUTER = "INSERT INTO computers (computer_hash_id) values (?)";
 	private static final String INSERT_COMPUTER_PARAMS = "INSERT INTO computer_params (" +
@@ -33,15 +33,15 @@ public class ComputersTable {
 
 	/**
 	 * Create a new computer in the computer table of the database.
-	 * @param hash_id the computer which to save.
+	 * @param computer_hash_id the computer which to save.
 	 * @return {@code true} if changes to database were made, {@code false} otherwise.
 	 */
-	public boolean createComputer(String hash_id)
+	public boolean createComputer(int computer_hash_id)
 	{
 		try (Connection con = DatabaseFactory.getInstance().getConnection();
 			PreparedStatement statement = con.prepareStatement(INSERT_COMPUTER))
 		{
-			statement.setString(1, hash_id);
+			statement.setInt(1, computer_hash_id);
 			return statement.executeUpdate() >= 1;
 		}
 		catch (Exception e)
@@ -59,10 +59,10 @@ public class ComputersTable {
 	public boolean createComputerParameters(ParamsSet computerParameters)
 	{
 		try (Connection con = DatabaseFactory.getInstance().getConnection();
-			 PreparedStatement statement = con.prepareStatement(INSERT_COMPUTER_PARAMS))
+			 PreparedStatement st = con.prepareStatement(INSERT_COMPUTER_PARAMS))
 		{
-			Parameters.VALUES.forEach(e -> saveToDatabase(statement, e, computerParameters));
-			return statement.executeUpdate() >= 1;
+			Parameters.VALUES.forEach(params -> saveToDatabase(st, params, computerParameters));
+			return st.executeUpdate() >= 1;
 		}
 		catch (Exception e)
 		{
@@ -71,12 +71,24 @@ public class ComputersTable {
 		}
 	}
 
-	public void saveToDatabase(PreparedStatement statement, Parameters param, ParamsSet computerParameters) {
+	public void saveToDatabase(PreparedStatement st, Parameters params, ParamsSet computerParameter) {
 		try {
-			statement.setString(param.getFieldId(), computerParameters.getMap().);
+			if (computerParameter.getMap().get(params.getFieldName()) instanceof String)
+			{
+				st.setString(params.getFieldId(), computerParameter.getString(params.getFieldName()));
+			}
+			else if (computerParameter.getMap().get(params.getFieldName()) instanceof Integer)
+			{
+				st.setInt(params.getFieldId(), computerParameter.getInt(params.getFieldName()));
+			}
+			else if (computerParameter.getMap().get(params.getFieldName()) instanceof Long)
+			{
+				st.setLong(params.getFieldId(), computerParameter.getLong(params.getFieldName()));
+			}
 		} catch (SQLException err) {
 			err.printStackTrace();
 		}
+		System.out.println(params.getFieldId() + " ::: " + params.getFieldName() + " ---> " + computerParameter.getMap().get(params.getFieldName()));
 	}
 
 	/**
@@ -107,12 +119,12 @@ public class ComputersTable {
 	 * @param computerHashId the computer hashid whose data to restore.
 	 * @return true or false.
 	 */
-	public boolean selectComputer(String computerHashId)
+	public boolean selectComputer(int computerHashId)
 	{
 		try (Connection con = DatabaseFactory.getInstance().getConnection();
 			PreparedStatement ps = con.prepareStatement(SELECT_COMPUTER))
 		{
-			ps.setString(1, computerHashId);
+			ps.setInt(1, computerHashId);
 			
 			try (ResultSet rs = ps.executeQuery())
 			{
@@ -134,13 +146,13 @@ public class ComputersTable {
 	 * @param computerHashId the computer hashid whose data to restore.
 	 * @return true or false.
 	 */
-	public ComputerParameters selectComputerParameters(String computerHashId)
+	public ComputerParameters selectComputerParameters(int computerHashId)
 	{
 		ComputerParameters cp = null;
 		try (Connection con = DatabaseFactory.getInstance().getConnection();
 			 PreparedStatement ps = con.prepareStatement(SELECT_COMPUTER_PARAMS))
 		{
-			ps.setString(1, computerHashId);
+			ps.setInt(1, computerHashId);
 
 			try (ResultSet rs = ps.executeQuery())
 			{
@@ -156,7 +168,7 @@ public class ComputersTable {
 		return cp;
 	}
 
-	public void createComputerWithParameters (String computerHashId, ParamsSet computerParameters)
+	public void createComputerWithParameters (int computerHashId, ParamsSet computerParameters)
 	{
 		if (createComputer(computerHashId))
 		{
@@ -164,7 +176,7 @@ public class ComputersTable {
 		}
 	}
 
-	public ComputerParameters selectComputerWithParams(String computerHashId)
+	public ComputerParameters selectComputerWithParams(int computerHashId)
 	{
 		ComputerParameters cp = null;
 		if (selectComputer(computerHashId))

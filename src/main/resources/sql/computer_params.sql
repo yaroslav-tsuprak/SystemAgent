@@ -1,6 +1,6 @@
 CREATE TABLE `computer_params` (
     `id` int(11) NOT NULL AUTO_INCREMENT,
-    `computer_hash_id` varchar(20) NOT NULL DEFAULT '',
+    `computer_hash_id` bigint(20) NOT NULL,
     `os_full_name` varchar(255) NOT NULL DEFAULT '',
     `bios_description` varchar(255) NOT NULL DEFAULT '',
     `bios_manufacturer` varchar(255) NOT NULL DEFAULT '',

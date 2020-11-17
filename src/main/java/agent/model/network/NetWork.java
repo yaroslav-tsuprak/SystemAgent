@@ -28,11 +28,13 @@ public final class NetWork implements INetWork {
 		_hostName = net.getHostName();
 		_domainName = net.getDomainName();
 
-		sysInfo.getHardware().getNetworkIFs().forEach(n -> {
-			_adaptersNames.join(n.getDisplayName());
-			_ipAddress.join(Arrays.toString(n.getIPv4addr()));
-			_macAddress.join(n.getMacaddr());
-		});
+		sysInfo.getHardware().getNetworkIFs().forEach(n -> setAllNetworkParameters(n.getDisplayName(), Arrays.toString(n.getIPv4addr()), n.getMacaddr()));
+	}
+
+	public void setAllNetworkParameters(String adapterName, String ipAddress, String macAddress) {
+		_adaptersNames = _adaptersNames + " " + adapterName;
+		_ipAddress = _ipAddress + " " + ipAddress;
+		_macAddress = _macAddress = " " + macAddress;
 	}
 
 	@Override
