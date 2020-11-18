@@ -17,13 +17,24 @@ public class SystemAgent {
 		final ComputerParameters computerOnline = new ComputerParameters(new Computer());
 		final int _computerHashId = computerOnline.getParamSet().getInt("computer_hash_id");
 		final ParamsSet computerParamSet = computerOnline.getParamSet();
+		// Looking PC in db
 		final ComputerParameters computerFromDatabase = ComputersTable.getInstance().selectComputerWithParams(_computerHashId);
-		if (computerFromDatabase != null) {
+		// Have this PC
+		if (!computerFromDatabase.getParamSet().isEmpty()) {
+			// Looking for differences
 			ParamsSet computerDiff = new ComputersEquality(computerOnline, computerFromDatabase).getDiff();
-			if (!computerDiff.isEmpty() || computerDiff != null) {
-				ComputersTable.getInstance().saveComputerDiff(computerParamSet, computerDiff);
+			// If we have differences
+			if (!computerDiff.isEmpty()) {
+				// Save diff to db
+				ComputersTable.getInstance().saveComputerDiff(_computerHashId, computerDiff);
+			}
+			else
+			{
+				// Change last_active in db
+				ComputersTable.getInstance().saveLastActive(_computerHashId);
 			}
 		} else {
+			// Create new PC in db
 			ComputersTable.getInstance().createComputerWithParameters(_computerHashId, computerParamSet);
 		}
 	}
