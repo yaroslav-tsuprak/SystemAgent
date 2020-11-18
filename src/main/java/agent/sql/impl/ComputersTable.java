@@ -111,7 +111,7 @@ public class ComputersTable {
 		}
 	}
 
-	public String setUpdatableStatement(PreparedStatement statement, String columnName, ParamsSet computerParameters, int computerHashId) {
+	public void setUpdatableStatement(PreparedStatement statement, String columnName, ParamsSet computerParameters, int computerHashId) {
 		try {
 			if (computerParameters.getMap().get(columnName) instanceof String)
 			{
@@ -129,7 +129,6 @@ public class ComputersTable {
 		} catch (SQLException err) {
 			err.printStackTrace();
 		}
-		return statement.toString();
 	}
 
 	/**
@@ -138,23 +137,26 @@ public class ComputersTable {
 	 */
 	public void saveComputerDiff(int computerHashId, ParamsSet computerDiff)
 	{
-		try (Connection con = DatabaseFactory.getInstance().getConnection();
-			 PreparedStatement update = con.prepareStatement(UPDATE_COMPUTER_PARAMETERS))
+		try (Connection connection = DatabaseFactory.getInstance().getConnection();)
+//			 PreparedStatement update = con.prepareStatement(UPDATE_COMPUTER_PARAMETERS))
 		{
 			computerDiff.getMap().forEach((k, v) -> {
-				String result = setUpdatableStatement(update, k.toString(), computerDiff, computerHashId).replace("%columnName%", k.toString());
+				String sqlQuery = UPDATE_COMPUTER_PARAMETERS.replace("%columnName%", k.toString());
 				try {
-					update.execute(result);
+					PreparedStatement update = connection.prepareStatement(sqlQuery);
+					setUpdatableStatement(update, k.toString(), computerDiff, computerHashId);
+					update.executeQuery();
 				} catch (SQLException throwables) {
 					throwables.printStackTrace();
 				}
-				System.out.println(result);
+				System.out.println(sqlQuery);
 			});
 		}
 		catch (Exception e)
 		{
 			LOGGER.error("Could not update computer prameter data: " + computerDiff.toString() + " :: " + e.getMessage(), e);
 		}
+		saveLastActive(computerHashId);
 	}
 	
 	/**
@@ -218,15 +220,15 @@ public class ComputersTable {
 		}
 	}
 
-	public ComputerParameters selectComputerWithParams(int computerHashId)
-	{
-		ComputerParameters cp = null;
-		if (selectComputer(computerHashId))
-		{
-			cp = selectComputerParameters(computerHashId);
-		}
-		return cp;
-	}
+//	public ComputerParameters selectComputerWithParams(int computerHashId)
+//	{
+//		ComputerParameters cp = null;
+//		if (selectComputer(computerHashId))
+//		{
+//			cp = selectComputerParameters(computerHashId);
+//		}
+//		return cp;
+//	}
 
 	public static ComputersTable getInstance()
 	{

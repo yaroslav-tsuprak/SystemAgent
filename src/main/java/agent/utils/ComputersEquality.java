@@ -1,5 +1,6 @@
-package agent.model;
+package agent.utils;
 
+import agent.model.ComputerParameters;
 import agent.utils.ParamsSet;
 
 /**
