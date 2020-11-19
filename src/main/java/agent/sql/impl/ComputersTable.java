@@ -1,11 +1,8 @@
 package agent.sql.impl;
 
-import java.sql.Connection;
-import java.sql.Date;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.Map;
+import java.sql.*;
+import java.util.Optional;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import agent.enums.Parameters;
 import agent.model.ComputerParameters;
@@ -13,7 +10,6 @@ import agent.utils.ParamsSet;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import agent.model.Computer;
 import agent.sql.DatabaseFactory;
 
 public class ComputersTable {
@@ -28,10 +24,11 @@ public class ComputersTable {
 			"disk_name,disk_serial,disk_size,usb_name,usb_unique_device_id,usb_vendor,graphics_card_name,graphics_card_vendor,graphics_card_vram," +
 			"memory_bank_label,memory_capacity,memory_manufacturer,memory_total,memory_type,adapters_names,ip_address,mac_address,netbios_full_name) " +
 			"values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
-	private static final String UPDATE_COMPUTER_PARAMETERS = "UPDATE computer_params SET %columnName%=? WHERE computer_hash_id=?";
+	private static final String UPDATE_COMPUTER_PARAMETERS = "UPDATE computer_params SET ### WHERE computer_hash_id=?";
 	private static final String SELECT_COMPUTER = "SELECT * FROM computers WHERE computer_hash_id=?";
 	private static final String SELECT_COMPUTER_PARAMS = "SELECT * FROM computer_params WHERE computer_hash_id=?";
 	private static final String UPDATE_COMPUTER_LAST_ACTIVE = "UPDATE computers SET last_active=NOW() WHERE computer_hash_id=?";
+	private String sqlQueryes = "";
 
 	/**
 	 * Update last active of agent in the computer_params table of the database.
@@ -111,21 +108,20 @@ public class ComputersTable {
 		}
 	}
 
-	public void setUpdatableStatement(PreparedStatement statement, String columnName, ParamsSet computerParameters, int computerHashId) {
+	public void setUpdatableStatement(PreparedStatement statement, int stNumber, Object computerDiffParam) {
 		try {
-			if (computerParameters.getMap().get(columnName) instanceof String)
+			if (computerDiffParam instanceof String)
 			{
-				statement.setString(1, computerParameters.getString(columnName));
+				statement.setString(stNumber, (String) computerDiffParam);
 			}
-			else if (computerParameters.getMap().get(columnName) instanceof Integer)
+			else if (computerDiffParam instanceof Integer)
 			{
-				statement.setInt(1, computerParameters.getInt(columnName));
+				statement.setInt(stNumber, (int) computerDiffParam);
 			}
-			else if (computerParameters.getMap().get(columnName) instanceof Long)
+			else if (computerDiffParam instanceof Long)
 			{
-				statement.setLong(1, computerParameters.getLong(columnName));
+				statement.setLong(stNumber, (Long) computerDiffParam);
 			}
-			statement.setInt(2, computerHashId);
 		} catch (SQLException err) {
 			err.printStackTrace();
 		}
@@ -135,28 +131,31 @@ public class ComputersTable {
 	 * Updates identified changes the computer parameters data in the database.
 	 * @param computerDiff the changes which to save.
 	 */
-	public void saveComputerDiff(int computerHashId, ParamsSet computerDiff)
+	public boolean saveComputerDiff(int computerHashId, ParamsSet computerDiff)
 	{
-		try (Connection connection = DatabaseFactory.getInstance().getConnection();)
-//			 PreparedStatement update = con.prepareStatement(UPDATE_COMPUTER_PARAMETERS))
+		computerDiff.getMap().forEach((k, v) -> sqlQueryes = sqlQueryes + k.toString() + "=?" + ",");
+		sqlQueryes = UPDATE_COMPUTER_PARAMETERS.replace("###", removeLastCharacter(sqlQueryes));
+		try (Connection conn = DatabaseFactory.getInstance().getConnection();
+			  PreparedStatement update = conn.prepareStatement(sqlQueryes))
 		{
-			computerDiff.getMap().forEach((k, v) -> {
-				String sqlQuery = UPDATE_COMPUTER_PARAMETERS.replace("%columnName%", k.toString());
-				try {
-					PreparedStatement update = connection.prepareStatement(sqlQuery);
-					setUpdatableStatement(update, k.toString(), computerDiff, computerHashId);
-					update.executeQuery();
-				} catch (SQLException throwables) {
-					throwables.printStackTrace();
-				}
-				System.out.println(sqlQuery);
-			});
+			AtomicInteger i = new AtomicInteger(1);
+			computerDiff.getMap().forEach((k, v) -> setUpdatableStatement(update, i.getAndIncrement(), v));
+			update.setInt(i.get(), computerHashId);
+			return update.executeUpdate() >= 1;
 		}
 		catch (Exception e)
 		{
-			LOGGER.error("Could not update computer prameter data: " + computerDiff.toString() + " :: " + e.getMessage(), e);
+			LOGGER.error("Could not update computer prameter data: " + computerDiff.toString() + " ::: " + e.getMessage(), e);
+			return false;
 		}
-		saveLastActive(computerHashId);
+	}
+
+	public static String removeLastCharacter(String str) {
+		String result = Optional.ofNullable(str)
+				.filter(sStr -> sStr.length() != 0)
+				.map(sStr -> sStr.substring(0, sStr.length() - 1))
+				.orElse(str);
+		return result;
 	}
 	
 	/**
@@ -197,7 +196,6 @@ public class ComputersTable {
 			 PreparedStatement ps = con.prepareStatement(SELECT_COMPUTER_PARAMS))
 		{
 			ps.setInt(1, computerHashId);
-
 			try (ResultSet rs = ps.executeQuery())
 			{
 				if (rs.next()) {
@@ -219,16 +217,6 @@ public class ComputersTable {
 			createComputerParameters(computerParameters);
 		}
 	}
-
-//	public ComputerParameters selectComputerWithParams(int computerHashId)
-//	{
-//		ComputerParameters cp = null;
-//		if (selectComputer(computerHashId))
-//		{
-//			cp = selectComputerParameters(computerHashId);
-//		}
-//		return cp;
-//	}
 
 	public static ComputersTable getInstance()
 	{
