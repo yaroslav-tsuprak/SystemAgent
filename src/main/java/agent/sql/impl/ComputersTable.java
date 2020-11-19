@@ -155,7 +155,7 @@ public class ComputersTable {
 		}
 		catch (Exception e)
 		{
-			LOGGER.error("Could not update computer prameter data: " + computerDiff.toString() + " ::: " + e.getMessage(), e);
+			LOGGER.error("Could not update computer parameter data: " + computerDiff.toString() + " ::: " + e.getMessage(), e);
 			return false;
 		}
 	}
