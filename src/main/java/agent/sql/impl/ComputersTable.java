@@ -1,9 +1,11 @@
 package agent.sql.impl;
 
 import java.sql.*;
+import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import agent.enums.EventMessages;
 import agent.enums.Parameters;
 import agent.model.ComputerParameters;
 import agent.utils.ParamsSet;
@@ -18,6 +20,7 @@ public class ComputersTable {
 
 	// SQL queries
 	private static final String INSERT_COMPUTER = "INSERT INTO computers (computer_hash_id) values (?)";
+	private static final String INSERT_EVENT = "INSERT INTO events (computer_hash_id,message_id,field_name,old_value,new_value) values (?,?,?,?,?)";
 	private static final String INSERT_COMPUTER_PARAMS = "INSERT INTO computer_params (" +
 			"computer_hash_id,os_full_name,bios_description,bios_manufacturer,bios_name,bios_release_date,bios_version,cpu_id,cpu_identifier,cpu_name,cpu_vendor," +
 			"logical_cpu_count,physical_cpu_count,motherboard_manufacturer,motherboard_model,motherboard_serial,motherboard_version,disk_model," +
@@ -108,7 +111,7 @@ public class ComputersTable {
 		}
 	}
 
-	public void setUpdatableStatement(PreparedStatement statement, int stNumber, Object computerDiffParam) {
+	public void setStatement(PreparedStatement statement, int stNumber, Object computerDiffParam) {
 		try {
 			if (computerDiffParam instanceof String)
 			{
@@ -127,8 +130,15 @@ public class ComputersTable {
 		}
 	}
 
+	public void saveComputerDiffsAndEvents(int computerHashId, ParamsSet computerFromDatabase, ParamsSet computerDiff)
+	{
+		saveComputerDiff(computerHashId, computerDiff);
+		computerDiff.getMap().forEach((k, v) -> saveEvent(computerHashId, k.toString(), computerFromDatabase.getString(k.toString()), v.toString()));
+	}
+
 	/**
 	 * Updates identified changes the computer parameters data in the database.
+	 * @param computerHashId the unique computer's id.
 	 * @param computerDiff the changes which to save.
 	 */
 	public boolean saveComputerDiff(int computerHashId, ParamsSet computerDiff)
@@ -139,7 +149,7 @@ public class ComputersTable {
 			  PreparedStatement update = conn.prepareStatement(sqlQueryes))
 		{
 			AtomicInteger i = new AtomicInteger(1);
-			computerDiff.getMap().forEach((k, v) -> setUpdatableStatement(update, i.getAndIncrement(), v));
+			computerDiff.getMap().forEach((k, v) -> setStatement(update, i.getAndIncrement(), v));
 			update.setInt(i.get(), computerHashId);
 			return update.executeUpdate() >= 1;
 		}
@@ -157,7 +167,32 @@ public class ComputersTable {
 				.orElse(str);
 		return result;
 	}
-	
+
+	/**
+	 * Save history about changes the computer parameters in the database.
+	 * @param computerHashId the unique computer's id to save.
+	 * @param fieldName the name of changed field to save.
+	 * @param oldValue old value to save.
+	 * @param newValue new value to save.
+	 */
+	public boolean saveEvent(int computerHashId, String fieldName, String oldValue, String newValue)
+	{
+		try (Connection conn = DatabaseFactory.getInstance().getConnection();
+			 PreparedStatement event = conn.prepareStatement(INSERT_EVENT)) {
+			event.setInt(1, computerHashId);
+			event.setInt(2, Parameters.findFieldIdByName(fieldName));
+			event.setString(3, fieldName);
+			event.setString(4, oldValue);
+			event.setString(5, newValue);
+			return event.executeUpdate() >= 1;
+		}
+		catch (Exception e)
+		{
+			LOGGER.error("Could not save event: " + e.getMessage(), e);
+			return false;
+		}
+	}
+
 	/**
 	 * Search the computer for the given {@code computerHashId} from the database.
 	 * @param computerHashId the computer hashid whose data to restore.

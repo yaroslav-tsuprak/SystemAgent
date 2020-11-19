@@ -63,17 +63,25 @@ public enum EventMessages {
     }
 
     /**
+     * @return the message.
+     */
+    public String getMessage()
+    {
+        return _message;
+    }
+
+    /**
      * Finds the {@code Message} by its messageId
      * @param messageId the messageId
      * @return the {@code Message} if its found, {@code null} otherwise.
      */
-    public static EventMessages findMessageById(int messageId)
+    public static String findMessageById(int messageId)
     {
         for (EventMessages messages : VALUES)
         {
             if (messages.getMessageId() == messageId)
             {
-                return messages;
+                return messages.getMessage();
             }
         }
         return null;

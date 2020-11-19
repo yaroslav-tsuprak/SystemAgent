@@ -26,8 +26,8 @@ public class SystemAgent {
 				ParamsSet computerDiff = new ComputersEquality(computerOnline, computerFromDatabase).getDiff();
 				// If we have differences
 				if (!computerDiff.isEmpty()) {
-					// Save diff to db
-					ComputersTable.getInstance().saveComputerDiff(_computerHashId, computerDiff);
+					// Save diff to db with all events
+					ComputersTable.getInstance().saveComputerDiffsAndEvents(_computerHashId, computerFromDatabase.getParamSet(), computerDiff);
 				}
 			} else {
 				// Save all PC's parameters
