@@ -68,6 +68,31 @@
 		<plugins>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-assembly-plugin</artifactId>
+				<version>3.3.0</version>
+				<configuration>
+					<archive>
+						<manifest>
+							<addClasspath>true</addClasspath>
+							<mainClass>agent.SystemAgent</mainClass>
+						</manifest>
+					</archive>
+					<descriptorRefs>
+						<descriptorRef>jar-with-dependencies</descriptorRef>
+					</descriptorRefs>
+				</configuration>
+				<executions>
+					<execution>
+						<id>assemble-all</id>
+						<phase>package</phase>
+						<goals>
+							<goal>single</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
 				<version>3.8.1</version>
 				<configuration>
@@ -88,7 +113,7 @@
 						</goals>
 						<configuration>
 							<headerType>console</headerType>
-							<jar>${project.build.directory}/${artifactId}-${version}.jar</jar>
+							<jar>${project.build.directory}/SystemAgent-1.0-jar-with-dependencies.jar</jar>
 							<outfile>${project.build.directory}/systemagent.exe</outfile>
 							<classPath>
 								<mainClass>agent.SystemAgent</mainClass>
@@ -97,11 +122,11 @@
 							</classPath>
 							<icon>src/main/resources/ico/systemagent.ico</icon>
 							<jre>
-								<path>c:/Program Files/AdoptOpenJDK/jdk-11.0.8.10-hotspot</path>
+								<path>${project.basedir}/jre</path>
 								<bundledJre64Bit>true</bundledJre64Bit>
 								<bundledJreAsFallback>false</bundledJreAsFallback>
-								<minVersion>1.8</minVersion>
-								<maxVersion>11</maxVersion>
+								<minVersion>1.8.0</minVersion>
+								<maxVersion></maxVersion>
 								<runtimeBits>64</runtimeBits>
 							</jre>
 							<versionInfo>
