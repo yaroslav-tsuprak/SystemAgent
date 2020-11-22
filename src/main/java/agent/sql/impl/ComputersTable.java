@@ -1,22 +1,16 @@
 package agent.sql.impl;
 
 import java.sql.*;
-import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import agent.enums.EventMessages;
 import agent.enums.Parameters;
 import agent.model.ComputerParameters;
 import agent.utils.ParamsSet;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import agent.sql.DatabaseFactory;
 
 public class ComputersTable {
-	
-	private static final Logger LOGGER = LoggerFactory.getLogger(ComputersTable.class);
 
 	// SQL queries
 	private static final String INSERT_COMPUTER = "INSERT INTO computers (computer_hash_id) values (?)";
@@ -47,7 +41,7 @@ public class ComputersTable {
 		}
 		catch (Exception e)
 		{
-			LOGGER.error("Could not insert computer last active data: " + e.getMessage(), e);
+			e.printStackTrace();
 			return false;
 		}
 	}
@@ -67,7 +61,7 @@ public class ComputersTable {
 		}
 		catch (Exception e)
 		{
-			LOGGER.error("Could not insert computer data: " + e.getMessage(), e);
+			e.printStackTrace();
 			return false;
 		}
 	}
@@ -87,7 +81,7 @@ public class ComputersTable {
 		}
 		catch (Exception e)
 		{
-			LOGGER.error("Could not insert computer prameters data: " + e.getMessage(), e);
+			e.printStackTrace();
 			return false;
 		}
 	}
@@ -155,7 +149,7 @@ public class ComputersTable {
 		}
 		catch (Exception e)
 		{
-			LOGGER.error("Could not update computer parameter data: " + computerDiff.toString() + " ::: " + e.getMessage(), e);
+			e.printStackTrace();
 			return false;
 		}
 	}
@@ -188,7 +182,7 @@ public class ComputersTable {
 		}
 		catch (Exception e)
 		{
-			LOGGER.error("Could not save event: " + e.getMessage(), e);
+			e.printStackTrace();
 			return false;
 		}
 	}
@@ -215,7 +209,7 @@ public class ComputersTable {
 		}
 		catch (SQLException e)
 		{
-			LOGGER.warn("Error occurred while loading computer data for computerHashId: {}", computerHashId, e);
+			e.printStackTrace();
 		}
 		return false;
 	}
@@ -240,7 +234,7 @@ public class ComputersTable {
 		}
 		catch (SQLException e)
 		{
-			LOGGER.warn("Error occurred while loading computer data for computerHashId: {}", computerHashId, e);
+			e.printStackTrace();
 		}
 		return null;
 	}

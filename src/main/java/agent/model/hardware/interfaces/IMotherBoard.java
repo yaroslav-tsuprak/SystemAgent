@@ -9,5 +9,4 @@ public interface IMotherBoard {
 	public String getMotherBoardSerial();
 	
 	public String getMotherBoardVersion();
-
 }

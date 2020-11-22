@@ -17,5 +17,4 @@ public interface ICpu {
 	String getCpuIdentifier();
 	
 	String getCpuId();
-
 }

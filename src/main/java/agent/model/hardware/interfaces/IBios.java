@@ -11,5 +11,4 @@ public interface IBios {
 	String getBiosDescription();
 	
 	String getBiosReleaseDate();
-	
 }

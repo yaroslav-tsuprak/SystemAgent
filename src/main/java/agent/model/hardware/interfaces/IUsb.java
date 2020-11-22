@@ -11,5 +11,4 @@ public interface IUsb {
 	String getUsbVendor();
 	
 	String getUsbUniqueDeviceId();
-	
 }

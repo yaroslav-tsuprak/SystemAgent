@@ -13,5 +13,4 @@ public interface IOperationSystem {
 	String getOsVersionInfo();
 	
 	int getOsBitness();
-
 }

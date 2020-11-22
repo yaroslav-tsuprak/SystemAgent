@@ -13,8 +13,6 @@ public class ComputerParameters {
 
     ParamsSet set = new ParamsSet();
 
-    public ComputerParameters() {}
-
     public ComputerParameters(ResultSet resultSet) throws SQLException {
         set.set("computer_hash_id", resultSet.getInt("computer_hash_id"));
         set.set("os_full_name", resultSet.getString("os_full_name"));
@@ -95,9 +93,5 @@ public class ComputerParameters {
 
     public ParamsSet getParamSet() {
         return set;
-    }
-
-    public void setParamSet(ParamsSet _set) {
-        set = _set;
     }
 }

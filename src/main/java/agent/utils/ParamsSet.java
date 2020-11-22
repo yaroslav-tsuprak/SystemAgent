@@ -8,9 +8,6 @@ import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Supplier;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 /**
  * This class is meant to hold a set of (key,value) pairs.<br>
  * They are stored as object but can be retrieved in any type wanted. As long as cast is available.<br>
@@ -18,7 +15,6 @@ import org.slf4j.LoggerFactory;
  */
 public class ParamsSet
 {
-    private static final Logger LOGGER = LoggerFactory.getLogger(ParamsSet.class);
     /** Static empty immutable map, used to avoid multiple null checks over the source. */
     public static final ParamsSet EMPTY_STATSET = new ParamsSet(Collections.emptyMap());
 
@@ -504,7 +500,7 @@ public class ParamsSet
         {
             if ((!originalList.keySet().stream().allMatch(keyClass::isInstance)) || (!originalList.values().stream().allMatch(valueClass::isInstance)))
             {
-                LOGGER.warn("getMap(\"{}\", {}, {}) requested with wrong generic type: {}!", key, keyClass.getSimpleName(), valueClass.getSimpleName(), obj.getClass().getGenericInterfaces()[0], new ClassNotFoundException());
+                System.out.println("getMap(\"{}\", {}, {}) requested with wrong generic type: {}!" +  key + " " + keyClass.getSimpleName() + " " + valueClass.getSimpleName() + " " + obj.getClass().getGenericInterfaces()[0]);
             }
         }
         return (Map<K, V>) obj;
@@ -528,7 +524,7 @@ public class ParamsSet
         {
             if ((!originalList.keySet().stream().allMatch(keyClass::isInstance)) || (!originalList.values().stream().allMatch(List.class::isInstance)))
             {
-                LOGGER.warn("getMap(\"{}\", {}, {}) requested with wrong generic type: {}!", key, keyClass.getSimpleName(), valueClass.getSimpleName(), obj.getClass().getGenericInterfaces()[0], new ClassNotFoundException());
+                System.out.println("getMap(\"{}\", {}, {}) requested with wrong generic type: {}!" +  key + " " + keyClass.getSimpleName() + " " + valueClass.getSimpleName() + " " + obj.getClass().getGenericInterfaces()[0]);
             }
         }
         return (Map<K, List<V>>) obj;

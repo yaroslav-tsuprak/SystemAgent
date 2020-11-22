@@ -1,8 +1,6 @@
 package agent.model.network;
 
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 
 import agent.model.network.interfaces.INetWork;
 import oshi.SystemInfo;
@@ -34,12 +32,7 @@ public final class NetWork implements INetWork {
 	public void setAllNetworkParameters(String adapterName, String ipAddress, String macAddress) {
 		_adaptersNames = _adaptersNames + " " + adapterName;
 		_ipAddress = _ipAddress + " " + ipAddress;
-		_macAddress = _macAddress = " " + macAddress;
-	}
-
-	@Override
-	public String getHostName() {
-		return _hostName;
+		_macAddress = _macAddress + " " + macAddress;
 	}
 
 	@Override

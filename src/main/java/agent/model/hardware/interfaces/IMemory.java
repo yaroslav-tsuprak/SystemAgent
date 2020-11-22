@@ -11,5 +11,4 @@ public interface IMemory {
 	String getMemoryManufacturer();
 	
 	String getMemoryType();
-
 }

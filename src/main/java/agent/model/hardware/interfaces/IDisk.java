@@ -13,5 +13,4 @@ public interface IDisk {
 	String getDiskSerial();
 	
 	long getDiskSize();
-	
 }

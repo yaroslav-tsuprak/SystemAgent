@@ -4,8 +4,6 @@ import agent.model.os.interfaces.IOperationSystem;
 import oshi.SystemInfo;
 import oshi.software.os.OperatingSystem;
 
-import java.util.List;
-
 /**
  * @author Yaroslav
  */
@@ -31,12 +29,8 @@ public final class OperationSystem implements IOperationSystem {
 		_osBitness = os.getBitness();
 	}
 
-	public List<String> getParamsList() {
-		return List.of(getOSFullName());
-	}
-
 	public String getOSFullName() {
-		return getOsManufacturer() + " " + getOsFamily() + " " + getOsVersionInfo() + " " + getOsBitness();
+		return getOsManufacturer() + " " + getOsFamily() + " " + getOsVersionInfo() + " x" + getOsBitness();
 	}
 
 	public String getOsManufacturer() {
