@@ -11,8 +11,6 @@ import agent.model.network.NetWork;
 import agent.model.os.OperationSystem;
 import oshi.SystemInfo;
 
-import java.util.List;
-
 /**
  * @author Yaroslav
  */

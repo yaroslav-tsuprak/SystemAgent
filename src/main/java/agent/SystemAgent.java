@@ -17,6 +17,7 @@ public class SystemAgent {
 		final ComputerParameters computerOnline = new ComputerParameters(new Computer());
 		final int _computerHashId = computerOnline.getParamSet().getInt("computer_hash_id");
 		final ParamsSet computerOnlineParamSet = computerOnline.getParamSet();
+		System.out.println(computerOnline.getParamSet().toString());
 		// Looking PC in db
 		if (ComputersTable.getInstance().selectComputer(_computerHashId)) {
 			// Have this PC then get all PC's parameters
