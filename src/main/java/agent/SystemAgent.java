@@ -1,5 +1,6 @@
 package agent;
 
+import agent.config.Configuration;
 import agent.model.Computer;
 import agent.model.ComputerParameters;
 import agent.utils.ComputersEquality;
@@ -14,10 +15,15 @@ import agent.utils.ParamsSet;
 public class SystemAgent {
 
 	public static void main(String[] args) {
+		Configuration configuration = Configuration.getInstance();
+		if (args.length > 0) {
+			configuration.setDbUrl(args[0]);
+		}
+
 		final ComputerParameters computerOnline = new ComputerParameters(new Computer());
 		final int _computerHashId = computerOnline.getParamSet().getInt("computer_hash_id");
 		final ParamsSet computerOnlineParamSet = computerOnline.getParamSet();
-		System.out.println(computerOnline.getParamSet().toString());
+
 		// Looking PC in db
 		if (ComputersTable.getInstance().selectComputer(_computerHashId)) {
 			// Have this PC then get all PC's parameters

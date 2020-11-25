@@ -37,9 +37,10 @@ public final class DatabaseFactory
 	 */
 	public Connection getConnection()
 	{
+		Configuration configuration = Configuration.getInstance();
 		try
 		{
-			Connection con = DriverManager.getConnection(Configuration.DB_URL, Configuration.DB_USER, Configuration.DB_PASSWORD);
+			Connection con = DriverManager.getConnection(configuration.getDbUrl(), configuration.getDbUser(), configuration.getDbPassword());
 			return con;
 		}
 		catch (SQLException e)
